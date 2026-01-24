@@ -5,6 +5,8 @@
 // ============================================================================
 
 import { formatDistanceToNow, differenceInMinutes, differenceInHours, format, parseISO } from 'date-fns';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 import { Priority, CustomerTier, Sentiment } from '@/types';
 
 // ============================================================================
@@ -28,20 +30,20 @@ export function calculateSLAStatus(deadline: string): {
 } {
   const now = new Date();
   const deadlineDate = parseISO(deadline);
-  
+
   const minutesRemaining = differenceInMinutes(deadlineDate, now);
   const hoursRemaining = differenceInHours(deadlineDate, now);
-  
+
   const isBreached = minutesRemaining <= 0;
   const isCritical = minutesRemaining > 0 && minutesRemaining <= 60; // Less than 1 hour
   const isWarning = minutesRemaining > 60 && minutesRemaining <= 120; // Less than 2 hours
-  
+
   // Calculate percentage (assuming max SLA is 72 hours)
   const maxMinutes = 72 * 60;
   const percentageRemaining = Math.max(0, Math.min(100, (minutesRemaining / maxMinutes) * 100));
-  
+
   let displayText: string;
-  
+
   if (isBreached) {
     displayText = `Breached ${formatDistanceToNow(deadlineDate, { addSuffix: true })}`;
   } else if (minutesRemaining < 60) {
@@ -54,7 +56,7 @@ export function calculateSLAStatus(deadline: string): {
     const hrs = hoursRemaining % 24;
     displayText = `${days}d ${hrs}h remaining`;
   }
-  
+
   return {
     isBreached,
     isCritical,
@@ -71,13 +73,13 @@ export function calculateSLAStatus(deadline: string): {
  */
 export function formatSLACompact(deadline: string): string {
   const { minutesRemaining, isBreached } = calculateSLAStatus(deadline);
-  
+
   if (isBreached) return 'BREACHED';
   if (minutesRemaining < 60) return `${minutesRemaining}m`;
-  
+
   const hours = Math.floor(minutesRemaining / 60);
   if (hours < 24) return `${hours}h`;
-  
+
   const days = Math.floor(hours / 24);
   return `${days}d`;
 }
@@ -193,7 +195,7 @@ export function getConfidenceStyles(confidence: number): {
   needsReview: boolean;
 } {
   const isHigh = confidence >= 80;
-  
+
   return {
     bg: isHigh ? 'bg-[hsl(var(--confidence-high-bg))]' : 'bg-[hsl(var(--confidence-low-bg))]',
     text: isHigh ? 'text-[hsl(var(--confidence-high))]' : 'text-[hsl(var(--confidence-low))]',
@@ -217,7 +219,7 @@ export function getSentimentStyles(sentiment: string): {
   emoji: string;
 } {
   const normalizedSentiment = sentiment.toLowerCase();
-  
+
   if (normalizedSentiment === 'happy' || normalizedSentiment === 'positive') {
     return {
       bg: 'bg-[hsl(var(--sentiment-happy)/0.15)]',
@@ -225,7 +227,7 @@ export function getSentimentStyles(sentiment: string): {
       emoji: '😊',
     };
   }
-  
+
   if (normalizedSentiment === 'frustrated' || normalizedSentiment === 'negative' || normalizedSentiment === 'angry') {
     return {
       bg: 'bg-[hsl(var(--sentiment-frustrated)/0.15)]',
@@ -233,7 +235,7 @@ export function getSentimentStyles(sentiment: string): {
       emoji: '😤',
     };
   }
-  
+
   // Neutral default
   return {
     bg: 'bg-[hsl(var(--sentiment-neutral)/0.15)]',
@@ -318,11 +320,11 @@ export function extractEmailDomain(email: string): string {
 export function getInitials(emailOrName: string): string {
   const name = emailOrName.split('@')[0];
   const parts = name.split(/[._-]/);
-  
+
   if (parts.length >= 2) {
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }
-  
+
   return name.slice(0, 2).toUpperCase();
 }
 
@@ -332,8 +334,9 @@ export function getInitials(emailOrName: string): string {
 // ============================================================================
 
 /**
- * Combine class names conditionally
+ * Combine class names with clsx and tailwind-merge
+ * Required for shadcn/ui components
  */
-export function cn(...classes: (string | boolean | undefined | null)[]): string {
-  return classes.filter(Boolean).join(' ');
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
