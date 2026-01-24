@@ -7,10 +7,10 @@
 'use client';
 
 import React from 'react';
-import { 
-  AlertTriangle, 
-  Inbox, 
-  TrendingUp, 
+import {
+  AlertTriangle,
+  Inbox,
+  TrendingUp,
   Activity,
   Zap,
   Clock
@@ -60,47 +60,50 @@ function StatCard({ icon, label, value, subtext, variant = 'default', isLoading 
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-4 p-4 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
-        <div className="w-12 h-12 rounded-lg animate-shimmer" />
-        <div className="flex-1 space-y-2">
-          <div className="h-4 w-20 rounded animate-shimmer" />
-          <div className="h-8 w-16 rounded animate-shimmer" />
+      <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg sm:rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg animate-shimmer shrink-0" />
+        <div className="flex-1 space-y-2 min-w-0">
+          <div className="h-3 sm:h-4 w-16 sm:w-20 rounded animate-shimmer" />
+          <div className="h-6 sm:h-8 w-12 sm:w-16 rounded animate-shimmer" />
         </div>
       </div>
     );
   }
 
   return (
-    <div 
+    <div
       className={cn(
-        'flex items-center gap-4 p-4 rounded-xl border transition-all duration-300',
+        'flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg sm:rounded-xl border transition-all duration-300',
         'bg-[hsl(var(--card))] hover:bg-[hsl(var(--card-hover))]',
         'hover:border-[hsl(var(--border-hover))] hover:shadow-lg',
         variantStyles[variant],
         variant === 'danger' && typeof value === 'number' && value > 0 && 'animate-sla-pulse'
       )}
     >
-      {/* Icon Container */}
-      <div 
+      {/* Icon Container - responsive sizing */}
+      <div
         className={cn(
-          'flex items-center justify-center w-12 h-12 rounded-lg',
+          'flex items-center justify-center shrink-0',
+          'w-10 h-10 sm:w-12 sm:h-12 rounded-lg',
           'bg-[hsl(var(--muted)/0.5)]',
           iconStyles[variant]
         )}
       >
-        {icon}
+        <span className="[&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6">
+          {icon}
+        </span>
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col">
-        <span className="text-sm text-[hsl(var(--muted-foreground))] font-medium">
+      {/* Content - fluid typography */}
+      <div className="flex flex-col min-w-0">
+        <span className="text-fluid-xs sm:text-fluid-sm text-[hsl(var(--muted-foreground))] font-medium truncate">
           {label}
         </span>
-        <span className={cn('text-2xl font-bold', valueStyles[variant])}>
+        <span className={cn('text-fluid-xl sm:text-fluid-2xl font-bold', valueStyles[variant])}>
           {value}
         </span>
         {subtext && (
-          <span className="text-xs text-[hsl(var(--muted-foreground))]">
+          <span className="text-fluid-xs text-[hsl(var(--muted-foreground))] truncate">
             {subtext}
           </span>
         )}
@@ -117,10 +120,10 @@ export function StatsRow({ stats, isLoading = false }: StatsRowProps) {
   const sentimentStyles = getSentimentStyles(stats.avg_sentiment);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in">
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 animate-fade-in">
       {/* Critical SLA Breaches */}
       <StatCard
-        icon={<AlertTriangle className="w-6 h-6" />}
+        icon={<AlertTriangle />}
         label="SLA Breaches"
         value={stats.critical_breaches}
         subtext={stats.critical_breaches > 0 ? 'Requires immediate action' : 'All on track'}
@@ -130,7 +133,7 @@ export function StatsRow({ stats, isLoading = false }: StatsRowProps) {
 
       {/* My Queue Count */}
       <StatCard
-        icon={<Inbox className="w-6 h-6" />}
+        icon={<Inbox />}
         label="My Queue"
         value={stats.my_queue_count}
         subtext="Tickets assigned"
@@ -138,31 +141,32 @@ export function StatsRow({ stats, isLoading = false }: StatsRowProps) {
         isLoading={isLoading}
       />
 
-      {/* Average Sentiment */}
-      <div 
+      {/* Average Sentiment - custom card */}
+      <div
         className={cn(
-          'flex items-center gap-4 p-4 rounded-xl border transition-all duration-300',
+          'flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg sm:rounded-xl border transition-all duration-300',
           'bg-[hsl(var(--card))] hover:bg-[hsl(var(--card-hover))]',
           'border-[hsl(var(--border))] hover:border-[hsl(var(--border-hover))]',
           'hover:shadow-lg'
         )}
       >
-        <div 
+        <div
           className={cn(
-            'flex items-center justify-center w-12 h-12 rounded-lg',
+            'flex items-center justify-center shrink-0',
+            'w-10 h-10 sm:w-12 sm:h-12 rounded-lg',
             sentimentStyles.bg
           )}
         >
-          <span className="text-2xl">{sentimentStyles.emoji}</span>
+          <span className="text-xl sm:text-2xl">{sentimentStyles.emoji}</span>
         </div>
-        <div className="flex flex-col">
-          <span className="text-sm text-[hsl(var(--muted-foreground))] font-medium">
+        <div className="flex flex-col min-w-0">
+          <span className="text-fluid-xs sm:text-fluid-sm text-[hsl(var(--muted-foreground))] font-medium truncate">
             Avg. Sentiment
           </span>
-          <span className={cn('text-2xl font-bold', sentimentStyles.text)}>
+          <span className={cn('text-fluid-xl sm:text-fluid-2xl font-bold', sentimentStyles.text)}>
             {stats.avg_sentiment}
           </span>
-          <span className="text-xs text-[hsl(var(--muted-foreground))]">
+          <span className="text-fluid-xs text-[hsl(var(--muted-foreground))] truncate">
             Customer mood
           </span>
         </div>
@@ -170,7 +174,7 @@ export function StatsRow({ stats, isLoading = false }: StatsRowProps) {
 
       {/* Real-time Status */}
       <StatCard
-        icon={<Activity className="w-6 h-6" />}
+        icon={<Activity />}
         label="System Status"
         value="Live"
         subtext="Auto-refresh: 30s"

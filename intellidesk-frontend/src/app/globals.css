@@ -13,18 +13,20 @@
 
 :root {
   /* Base Colors */
-  --background: 222 47% 6%;      /* Deep dark blue-gray */
-  --foreground: 210 40% 98%;     /* Almost white */
-  
+  --background: 222 47% 6%;
+  /* Deep dark blue-gray */
+  --foreground: 210 40% 98%;
+  /* Almost white */
+
   /* Card/Surface Colors */
   --card: 222 47% 8%;
   --card-foreground: 210 40% 98%;
   --card-hover: 222 47% 11%;
-  
+
   /* Border Colors */
   --border: 217 33% 17%;
   --border-hover: 217 33% 25%;
-  
+
   /* Muted Colors */
   --muted: 217 33% 17%;
   --muted-foreground: 215 20% 65%;
@@ -33,19 +35,19 @@
      SEARCH: PRIORITY_COLORS
      Priority/Urgency Colors (SLA-based) - MUST MATCH PROBLEM STATEMENT
      ============================================================================ */
-  
+
   /* P1 - Critical (<1h SLA) - RED */
   --urgent: 0 84% 60%;
   --urgent-bg: 0 84% 15%;
-  
+
   /* P2 - High (<4h SLA) - ORANGE */
   --high: 25 95% 53%;
   --high-bg: 25 95% 15%;
-  
+
   /* P3 - Medium (<24h SLA) - BLUE */
   --medium: 217 91% 60%;
   --medium-bg: 217 91% 15%;
-  
+
   /* P4 - Low (<72h SLA) - GREEN */
   --low: 142 71% 45%;
   --low-bg: 142 71% 12%;
@@ -54,11 +56,11 @@
      SEARCH: CONFIDENCE_COLORS
      AI Confidence Score Colors
      ============================================================================ */
-  
+
   /* High Confidence (>80%) - EMERALD GREEN */
   --confidence-high: 142 76% 36%;
   --confidence-high-bg: 142 76% 12%;
-  
+
   /* Low Confidence (<80%) - AMBER/YELLOW */
   --confidence-low: 38 92% 50%;
   --confidence-low-bg: 38 92% 12%;
@@ -67,15 +69,15 @@
      SEARCH: TIER_COLORS
      Customer Tier Colors
      ============================================================================ */
-  
+
   /* Gold Tier */
   --tier-gold: 45 93% 47%;
   --tier-gold-bg: 45 93% 12%;
-  
+
   /* Silver Tier */
   --tier-silver: 220 14% 71%;
   --tier-silver-bg: 220 14% 20%;
-  
+
   /* Bronze Tier */
   --tier-bronze: 30 41% 45%;
   --tier-bronze-bg: 30 41% 12%;
@@ -84,7 +86,7 @@
      SEARCH: STATUS_COLORS
      Ticket Status Colors
      ============================================================================ */
-  
+
   --status-new: 217 91% 60%;
   --status-in-progress: 38 92% 50%;
   --status-resolved: 142 71% 45%;
@@ -93,7 +95,7 @@
      SEARCH: SENTIMENT_COLORS
      Sentiment Analysis Colors
      ============================================================================ */
-  
+
   --sentiment-happy: 142 76% 36%;
   --sentiment-neutral: 217 91% 60%;
   --sentiment-frustrated: 0 84% 60%;
@@ -103,7 +105,7 @@
   --primary-foreground: 222 47% 6%;
   --accent: 262 83% 58%;
   --accent-foreground: 210 40% 98%;
-  
+
   /* Success/Error/Warning */
   --success: 142 76% 36%;
   --error: 0 84% 60%;
@@ -125,13 +127,13 @@
   --color-muted-foreground: hsl(var(--muted-foreground));
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-  
+
   /* Priority colors */
   --color-urgent: hsl(var(--urgent));
   --color-high: hsl(var(--high));
   --color-medium: hsl(var(--medium));
   --color-low: hsl(var(--low));
-  
+
   /* Font families */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -169,10 +171,13 @@ body {
 
 /* SLA Critical Pulse Animation */
 @keyframes sla-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.7;
     transform: scale(1.02);
@@ -185,15 +190,18 @@ body {
 
 /* Subtle glow animation for critical items */
 @keyframes critical-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 5px hsl(var(--urgent) / 0.3),
-                0 0 10px hsl(var(--urgent) / 0.2),
-                0 0 15px hsl(var(--urgent) / 0.1);
+      0 0 10px hsl(var(--urgent) / 0.2),
+      0 0 15px hsl(var(--urgent) / 0.1);
   }
+
   50% {
     box-shadow: 0 0 10px hsl(var(--urgent) / 0.5),
-                0 0 20px hsl(var(--urgent) / 0.3),
-                0 0 30px hsl(var(--urgent) / 0.2);
+      0 0 20px hsl(var(--urgent) / 0.3),
+      0 0 30px hsl(var(--urgent) / 0.2);
   }
 }
 
@@ -207,6 +215,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -223,6 +232,7 @@ body {
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -238,18 +248,17 @@ body {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
 }
 
 .animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    hsl(var(--muted)) 25%,
-    hsl(var(--muted-foreground) / 0.1) 50%,
-    hsl(var(--muted)) 75%
-  );
+  background: linear-gradient(90deg,
+      hsl(var(--muted)) 25%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
@@ -303,16 +312,14 @@ body {
   inset: 0;
   border-radius: 12px;
   padding: 1px;
-  background: linear-gradient(
-    135deg,
-    hsl(var(--primary) / 0.3),
-    hsl(var(--accent) / 0.3)
-  );
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
+  background: linear-gradient(135deg,
+      hsl(var(--primary) / 0.3),
+      hsl(var(--accent) / 0.3));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
-  mask: 
-    linear-gradient(#fff 0 0) content-box, 
+  mask:
+    linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -334,7 +341,393 @@ body {
   border-radius: 50%;
 }
 
-.priority-dot-p1 { background: hsl(var(--urgent)); }
-.priority-dot-p2 { background: hsl(var(--high)); }
-.priority-dot-p3 { background: hsl(var(--medium)); }
-.priority-dot-p4 { background: hsl(var(--low)); }
+.priority-dot-p1 {
+  background: hsl(var(--urgent));
+}
+
+.priority-dot-p2 {
+  background: hsl(var(--high));
+}
+
+.priority-dot-p3 {
+  background: hsl(var(--medium));
+}
+
+.priority-dot-p4 {
+  background: hsl(var(--low));
+}
+
+/* ============================================================================
+   SEARCH: FLUID_TYPOGRAPHY
+   Fluid typography utilities using clamp() for smooth scaling
+   ============================================================================ */
+
+/* Extra breakpoint for very small devices */
+@media (min-width: 475px) {
+  .xs\:block {
+    display: block;
+  }
+
+  .xs\:flex {
+    display: flex;
+  }
+
+  .xs\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Fluid heading sizes - scale smoothly between mobile and desktop */
+.text-fluid-xs {
+  font-size: clamp(0.625rem, 0.5rem + 0.5vw, 0.75rem);
+  line-height: 1.4;
+}
+
+.text-fluid-sm {
+  font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  line-height: 1.5;
+}
+
+.text-fluid-base {
+  font-size: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  line-height: 1.5;
+}
+
+.text-fluid-lg {
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  line-height: 1.4;
+}
+
+.text-fluid-xl {
+  font-size: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  line-height: 1.35;
+}
+
+.text-fluid-2xl {
+  font-size: clamp(1.25rem, 1rem + 1.25vw, 1.5rem);
+  line-height: 1.3;
+}
+
+.text-fluid-3xl {
+  font-size: clamp(1.5rem, 1.25rem + 1.25vw, 1.875rem);
+  line-height: 1.25;
+}
+
+.text-fluid-4xl {
+  font-size: clamp(1.875rem, 1.5rem + 1.875vw, 2.25rem);
+  line-height: 1.2;
+}
+
+.text-fluid-5xl {
+  font-size: clamp(2.25rem, 1.75rem + 2.5vw, 3rem);
+  line-height: 1.1;
+}
+
+/* ============================================================================
+   SEARCH: FLUID_SPACING
+   Fluid spacing utilities using clamp() for responsive padding/margins
+   ============================================================================ */
+
+/* Fluid padding */
+.p-fluid-sm {
+  padding: clamp(0.5rem, 0.375rem + 0.625vw, 0.75rem);
+}
+
+.p-fluid {
+  padding: clamp(0.75rem, 0.5rem + 1.25vw, 1.5rem);
+}
+
+.p-fluid-lg {
+  padding: clamp(1rem, 0.75rem + 1.25vw, 2rem);
+}
+
+.p-fluid-xl {
+  padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+}
+
+/* Fluid horizontal padding */
+.px-fluid-sm {
+  padding-left: clamp(0.5rem, 0.375rem + 0.625vw, 0.75rem);
+  padding-right: clamp(0.5rem, 0.375rem + 0.625vw, 0.75rem);
+}
+
+.px-fluid {
+  padding-left: clamp(0.75rem, 0.5rem + 1.25vw, 1.5rem);
+  padding-right: clamp(0.75rem, 0.5rem + 1.25vw, 1.5rem);
+}
+
+.px-fluid-lg {
+  padding-left: clamp(1rem, 0.75rem + 1.25vw, 2rem);
+  padding-right: clamp(1rem, 0.75rem + 1.25vw, 2rem);
+}
+
+/* Fluid vertical padding */
+.py-fluid-sm {
+  padding-top: clamp(0.375rem, 0.25rem + 0.625vw, 0.625rem);
+  padding-bottom: clamp(0.375rem, 0.25rem + 0.625vw, 0.625rem);
+}
+
+.py-fluid {
+  padding-top: clamp(0.75rem, 0.5rem + 1.25vw, 1.5rem);
+  padding-bottom: clamp(0.75rem, 0.5rem + 1.25vw, 1.5rem);
+}
+
+.py-fluid-lg {
+  padding-top: clamp(1rem, 0.75rem + 1.25vw, 2rem);
+  padding-bottom: clamp(1rem, 0.75rem + 1.25vw, 2rem);
+}
+
+/* Fluid gaps */
+.gap-fluid-sm {
+  gap: clamp(0.375rem, 0.25rem + 0.625vw, 0.625rem);
+}
+
+.gap-fluid {
+  gap: clamp(0.5rem, 0.375rem + 0.625vw, 1rem);
+}
+
+.gap-fluid-lg {
+  gap: clamp(0.75rem, 0.5rem + 1.25vw, 1.5rem);
+}
+
+.gap-fluid-xl {
+  gap: clamp(1rem, 0.75rem + 1.25vw, 2rem);
+}
+
+/* Fluid margins */
+.mt-fluid {
+  margin-top: clamp(0.5rem, 0.375rem + 0.625vw, 1rem);
+}
+
+.mb-fluid {
+  margin-bottom: clamp(0.5rem, 0.375rem + 0.625vw, 1rem);
+}
+
+.my-fluid {
+  margin-top: clamp(0.5rem, 0.375rem + 0.625vw, 1rem);
+  margin-bottom: clamp(0.5rem, 0.375rem + 0.625vw, 1rem);
+}
+
+.my-fluid-lg {
+  margin-top: clamp(1rem, 0.75rem + 1.25vw, 2rem);
+  margin-bottom: clamp(1rem, 0.75rem + 1.25vw, 2rem);
+}
+
+/* Fluid space between items */
+.space-y-fluid>*+* {
+  margin-top: clamp(0.5rem, 0.375rem + 0.625vw, 1rem);
+}
+
+.space-y-fluid-lg>*+* {
+  margin-top: clamp(0.75rem, 0.5rem + 1.25vw, 1.5rem);
+}
+
+/* ============================================================================
+   SEARCH: RESPONSIVE_CONTAINER
+   Responsive container with fluid padding
+   ============================================================================ */
+
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1rem, 0.5rem + 2.5vw, 2rem);
+  padding-right: clamp(1rem, 0.5rem + 2.5vw, 2rem);
+}
+
+@media (min-width: 640px) {
+  .container-fluid {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-fluid {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-fluid {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-fluid {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container-fluid {
+    max-width: 1400px;
+  }
+}
+
+/* ============================================================================
+   SEARCH: RESPONSIVE_UTILITIES
+   Additional responsive utility classes
+   ============================================================================ */
+
+/* Prevent horizontal overflow */
+.overflow-x-clip {
+  overflow-x: clip;
+}
+
+/* Responsive hide/show with smooth transitions */
+.hide-on-mobile {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .hide-on-mobile {
+    display: flex;
+  }
+}
+
+/* Fluid icon sizing */
+.icon-fluid-sm {
+  width: clamp(0.75rem, 0.625rem + 0.625vw, 1rem);
+  height: clamp(0.75rem, 0.625rem + 0.625vw, 1rem);
+}
+
+.icon-fluid {
+  width: clamp(1rem, 0.875rem + 0.625vw, 1.25rem);
+  height: clamp(1rem, 0.875rem + 0.625vw, 1.25rem);
+}
+
+.icon-fluid-lg {
+  width: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+  height: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+}
+
+/* Fluid border radius */
+.rounded-fluid {
+  border-radius: clamp(0.5rem, 0.375rem + 0.625vw, 0.75rem);
+}
+
+.rounded-fluid-lg {
+  border-radius: clamp(0.75rem, 0.625rem + 0.625vw, 1rem);
+}
+
+.rounded-fluid-xl {
+  border-radius: clamp(1rem, 0.75rem + 1.25vw, 1.5rem);
+}
+
+/* Min-width content with text truncation safety */
+.min-w-0 {
+  min-width: 0;
+}
+
+/* Safe area insets for mobile browsers */
+@supports (padding: max(0px)) {
+  .safe-area-inset-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Touch-friendly tap targets - minimum 44x44px for accessibility */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Card responsive shadow */
+.shadow-responsive {
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+@media (min-width: 640px) {
+  .shadow-responsive {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+}
+
+@media (min-width: 1024px) {
+  .shadow-responsive {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+}
+
+/* Aspect ratio containers for consistent sizing */
+.aspect-card {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-wide {
+  aspect-ratio: 16 / 9;
+}
+
+/* Smooth responsive transitions */
+.transition-responsive {
+  transition-property: padding, margin, font-size, width, height, gap;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* ============================================================================
+   SEARCH: MOBILE_UTILITIES
+   Mobile-specific utilities
+   ============================================================================ */
+
+/* Hide scrollbar for cleaner horizontal scroll on mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+
+/* Line clamping for text truncation */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Safe area insets for mobile browsers with notches */
+.h-safe-area-inset-bottom {
+  height: env(safe-area-inset-bottom, 0);
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Prevent text selection on interactive elements */
+.select-none {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Prevent touch callout on long press */
+.touch-callout-none {
+  -webkit-touch-callout: none;
+}
+
+/* Better touch feedback on mobile */
+.tap-highlight-none {
+  -webkit-tap-highlight-color: transparent;
+}
