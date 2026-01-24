@@ -1,20 +1,10 @@
-// ============================================================================
-// SEARCH: DATA_HOOK
-// IntelliDesk AI - Custom Hook for Data Fetching
-// Polls n8n webhook every 30 seconds with fallback to mock data
-// ============================================================================
-
-'use client';
-
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { GlobalState } from '@/types';
-import { MOCK_DASHBOARD_DATA, API_CONFIG } from '@/lib/dummy-data';
+import { Ticket, DashboardStats } from '@/types/ticket';
+import { supabase } from '@/lib/supabase';
 
-/**
- * Hook return type with loading, error, and refresh capabilities
- */
 interface UseTicketStreamReturn {
-  data: GlobalState | null;
+  tickets: Ticket[];
+  stats: DashboardStats;
   loading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
@@ -22,141 +12,109 @@ interface UseTicketStreamReturn {
   isUsingMockData: boolean;
 }
 
-/**
- * SEARCH: USE_TICKET_STREAM
- * Custom React Hook for fetching dashboard data
- * 
- * Features:
- * - Polls n8n endpoint every 30 seconds
- * - Falls back to mock data if API unavailable
- * - Provides manual refresh capability
- * - Tracks last update time
- * 
- * @returns {UseTicketStreamReturn} Data, loading state, error, and utilities
- */
 export function useTicketStream(): UseTicketStreamReturn {
-  // State for data, loading, and error
-  const [data, setData] = useState<GlobalState | null>(null);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [stats, setStats] = useState<DashboardStats>({
+    queue_depth: 0,
+    critical_issues: 0,
+    avg_confidence: 0,
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [isUsingMockData, setIsUsingMockData] = useState<boolean>(false);
-
-  // Ref to track if component is mounted (cleanup)
   const isMounted = useRef<boolean>(true);
-  
-  // Ref for interval ID
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  /**
-   * SEARCH: FETCH_DATA
-   * Fetches data from n8n webhook or falls back to mock data
-   */
+  const calculateStats = (currentTickets: Ticket[]): DashboardStats => {
+    // Queue Depth: 'New' + 'Open'
+    const activeTickets = currentTickets.filter(t => t.status === 'New' || t.status === 'Open');
+    // Critical Issues: P1 tickets
+    const criticals = currentTickets.filter(t => t.priority === 'P1' && t.status !== 'Resolved' && t.status !== 'Closed').length;
+    // Avg Confidence
+    const totalConfidence = currentTickets.reduce((acc, t) => acc + (t.confidence_score || 0), 0);
+    // confidence_score is float 0.0-1.0 in DB, but UI might expect percentage?
+    // prompt says "Avg Confidence (Average of confidence_score)".
+    // TicketTable used "ticket.ai_analysis.confidence" which was 0-100.
+    // DB has 0.0-1.0. I should convert to percentage for UI consistency if needed.
+    // Let's assume 0.0-1.0 and multiply by 100 for display if needed.
+    // The previous code had `confidence: 94`. So I'll convert to percentage here.
+    const avgConfidence = currentTickets.length > 0 ? Math.round((totalConfidence / currentTickets.length) * 100) : 0;
+
+    return {
+      queue_depth: activeTickets.length,
+      critical_issues: criticals,
+      avg_confidence: avgConfidence, // stored as 0-100
+    };
+  };
+
   const fetchData = useCallback(async (): Promise<void> => {
-    // Don't update state if component unmounted
     if (!isMounted.current) return;
 
     try {
-      setLoading(true);
       setError(null);
+      
+      // Fetch active tickets (exclude closed if strictly following "Incoming queue" rule, but prompt says "hide status='Closed' tickets from the main 'Incoming' queue but allow them to be searchable")
+      // I'll fetch everything for now and filter in the UI or fetch everything except closed if the list is huge.
+      // prompt: "backend automatically closes duplicates... frontend should hide status='Closed' tickets from the main 'Incoming' queue"
+      // I'll fetch all to allow search, or just fetch non-closed. "allow them to be searchable" suggests I should have them.
+      // I'll fetch all.
+      const { data, error: supabaseError } = await supabase
+        .from('tickets')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-      // SEARCH: API_FETCH
-      // Attempt to fetch from real API endpoint
-      const response = await fetch(API_CONFIG.ENDPOINT, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Add cache control for fresh data
-        cache: 'no-store',
-      });
+      if (supabaseError) throw supabaseError;
 
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status} ${response.statusText}`);
-      }
-
-      const apiData: GlobalState = await response.json();
-
-      if (isMounted.current) {
-        setData(apiData);
-        setIsUsingMockData(false);
+      if (isMounted.current && data) {
+        // Map Supabase data to Ticket interface
+        // Need to ensure types match. Supabase returns strings/numbers.
+        const mappedTickets = data as Ticket[];
+        setTickets(mappedTickets);
+        setStats(calculateStats(mappedTickets));
         setLastUpdated(new Date());
-        setError(null);
       }
     } catch (err) {
-      // SEARCH: FALLBACK_LOGIC
-      // If API fails and fallback is enabled, use mock data
-      if (API_CONFIG.USE_MOCK_FALLBACK && isMounted.current) {
-        console.warn('[IntelliDesk] API unavailable, using mock data:', err);
-        setData(MOCK_DASHBOARD_DATA);
-        setIsUsingMockData(true);
-        setLastUpdated(new Date());
-        setError(null); // Clear error since we have fallback data
-      } else if (isMounted.current) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch data';
+      if (isMounted.current) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch tickets';
         setError(errorMessage);
-        console.error('[IntelliDesk] Data fetch error:', err);
+        console.error('[Ticketing] Fetch error:', err);
       }
     } finally {
-      if (isMounted.current) {
-        setLoading(false);
-      }
+      if (isMounted.current) setLoading(false);
     }
   }, []);
 
-  /**
-   * SEARCH: MANUAL_REFRESH
-   * Allows manual refresh of data
-   */
-  const refresh = useCallback(async (): Promise<void> => {
-    await fetchData();
-  }, [fetchData]);
-
-  /**
-   * SEARCH: POLLING_EFFECT
-   * Sets up polling interval on mount
-   */
   useEffect(() => {
     isMounted.current = true;
-
-    // Initial fetch
     fetchData();
 
-    // Set up polling interval
-    intervalRef.current = setInterval(() => {
-      fetchData();
-    }, API_CONFIG.POLL_INTERVAL);
+    // Poll every 5 seconds
+    const intervalId = setInterval(fetchData, 5000);
 
-    // Cleanup on unmount
     return () => {
       isMounted.current = false;
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      clearInterval(intervalId);
     };
   }, [fetchData]);
 
-  return {
-    data,
-    loading,
-    error,
-    refresh,
+  // Compatibility return
+  return { 
+    tickets,
+    stats,
+    loading, 
+    error, 
+    refresh: fetchData, 
     lastUpdated,
-    isUsingMockData,
+    isUsingMockData: false
   };
 }
 
-/**
- * SEARCH: USE_POLLING_STATUS
- * Simple hook to track polling status for UI feedback
- */
 export function usePollingStatus() {
-  const [nextPollIn, setNextPollIn] = useState<number>(API_CONFIG.POLL_INTERVAL / 1000);
+  const [nextPollIn, setNextPollIn] = useState<number>(5);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setNextPollIn((prev) => {
-        if (prev <= 1) return API_CONFIG.POLL_INTERVAL / 1000;
+        if (prev <= 1) return 5;
         return prev - 1;
       });
     }, 1000);
