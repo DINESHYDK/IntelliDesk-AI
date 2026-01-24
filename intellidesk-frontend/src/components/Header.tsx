@@ -70,7 +70,7 @@ export function Header({
           </div>
 
           {/* Status & Controls */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             {/* Connection Status */}
             <div 
               className={cn(
@@ -121,20 +121,6 @@ export function Header({
               title="Refresh data"
             >
               <RefreshCw className="w-5 h-5" />
-            </button>
-
-            {/* Notifications */}
-            <button 
-              className={cn(
-                'relative p-2 rounded-lg transition-all duration-200',
-                'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]',
-                'hover:bg-[hsl(var(--muted))]'
-              )}
-            >
-              <Bell className="w-5 h-5" />
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[hsl(var(--urgent))] text-[10px] font-bold text-white flex items-center justify-center">
-                2
-              </span>
             </button>
 
             {/* Theme Toggle */}
