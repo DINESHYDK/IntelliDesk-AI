@@ -4,6 +4,7 @@
 // ============================================================================
 
 export { StatsRow } from './StatsRow';
+export { CommandCenterStats } from './CommandCenterStats';
 export { TicketTable } from './TicketTable';
 export { SLATimer } from './SLATimer';
 export { AIReasoningOverlay } from './AIReasoningOverlay';

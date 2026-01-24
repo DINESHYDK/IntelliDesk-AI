@@ -9,7 +9,7 @@
 import React from 'react';
 import { useTicketStream, usePollingStatus } from '@/hooks/useTicketStream';
 import { Header } from '@/components/Header';
-import { StatsRow } from '@/components/StatsRow';
+import { CommandCenterStats } from '@/components/CommandCenterStats';
 import { TicketTable } from '@/components/TicketTable';
 import { Brain, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -123,10 +123,10 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Stats Row */}
+        {/* Command Center Stats Row */}
         {data && (
           <section>
-            <StatsRow stats={data.stats} isLoading={loading && !data} />
+            <CommandCenterStats tickets={data.tickets} isLoading={loading && !data} />
           </section>
         )}
 
