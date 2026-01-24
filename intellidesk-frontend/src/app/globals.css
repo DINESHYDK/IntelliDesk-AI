@@ -1,0 +1,340 @@
+/* ============================================================================
+   SEARCH: GLOBAL_STYLES
+   IntelliDesk AI - Global CSS with HSL Color Variables
+   Design System: Dark theme with vibrant accent colors
+   ============================================================================ */
+
+@import "tailwindcss";
+
+/* ============================================================================
+   SEARCH: CSS_VARIABLES
+   HSL Color Variables for theming and opacity modifiers
+   ============================================================================ */
+
+:root {
+  /* Base Colors */
+  --background: 222 47% 6%;      /* Deep dark blue-gray */
+  --foreground: 210 40% 98%;     /* Almost white */
+  
+  /* Card/Surface Colors */
+  --card: 222 47% 8%;
+  --card-foreground: 210 40% 98%;
+  --card-hover: 222 47% 11%;
+  
+  /* Border Colors */
+  --border: 217 33% 17%;
+  --border-hover: 217 33% 25%;
+  
+  /* Muted Colors */
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+
+  /* ============================================================================
+     SEARCH: PRIORITY_COLORS
+     Priority/Urgency Colors (SLA-based) - MUST MATCH PROBLEM STATEMENT
+     ============================================================================ */
+  
+  /* P1 - Critical (<1h SLA) - RED */
+  --urgent: 0 84% 60%;
+  --urgent-bg: 0 84% 15%;
+  
+  /* P2 - High (<4h SLA) - ORANGE */
+  --high: 25 95% 53%;
+  --high-bg: 25 95% 15%;
+  
+  /* P3 - Medium (<24h SLA) - BLUE */
+  --medium: 217 91% 60%;
+  --medium-bg: 217 91% 15%;
+  
+  /* P4 - Low (<72h SLA) - GREEN */
+  --low: 142 71% 45%;
+  --low-bg: 142 71% 12%;
+
+  /* ============================================================================
+     SEARCH: CONFIDENCE_COLORS
+     AI Confidence Score Colors
+     ============================================================================ */
+  
+  /* High Confidence (>80%) - EMERALD GREEN */
+  --confidence-high: 142 76% 36%;
+  --confidence-high-bg: 142 76% 12%;
+  
+  /* Low Confidence (<80%) - AMBER/YELLOW */
+  --confidence-low: 38 92% 50%;
+  --confidence-low-bg: 38 92% 12%;
+
+  /* ============================================================================
+     SEARCH: TIER_COLORS
+     Customer Tier Colors
+     ============================================================================ */
+  
+  /* Gold Tier */
+  --tier-gold: 45 93% 47%;
+  --tier-gold-bg: 45 93% 12%;
+  
+  /* Silver Tier */
+  --tier-silver: 220 14% 71%;
+  --tier-silver-bg: 220 14% 20%;
+  
+  /* Bronze Tier */
+  --tier-bronze: 30 41% 45%;
+  --tier-bronze-bg: 30 41% 12%;
+
+  /* ============================================================================
+     SEARCH: STATUS_COLORS
+     Ticket Status Colors
+     ============================================================================ */
+  
+  --status-new: 217 91% 60%;
+  --status-in-progress: 38 92% 50%;
+  --status-resolved: 142 71% 45%;
+
+  /* ============================================================================
+     SEARCH: SENTIMENT_COLORS
+     Sentiment Analysis Colors
+     ============================================================================ */
+  
+  --sentiment-happy: 142 76% 36%;
+  --sentiment-neutral: 217 91% 60%;
+  --sentiment-frustrated: 0 84% 60%;
+
+  /* Accent & Interactive Colors */
+  --primary: 217 91% 60%;
+  --primary-foreground: 222 47% 6%;
+  --accent: 262 83% 58%;
+  --accent-foreground: 210 40% 98%;
+  
+  /* Success/Error/Warning */
+  --success: 142 76% 36%;
+  --error: 0 84% 60%;
+  --warning: 38 92% 50%;
+}
+
+/* ============================================================================
+   SEARCH: TAILWIND_THEME
+   Tailwind CSS Theme Integration
+   ============================================================================ */
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-border: hsl(var(--border));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  
+  /* Priority colors */
+  --color-urgent: hsl(var(--urgent));
+  --color-high: hsl(var(--high));
+  --color-medium: hsl(var(--medium));
+  --color-low: hsl(var(--low));
+  
+  /* Font families */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ============================================================================
+   SEARCH: BASE_STYLES
+   Base element styles
+   ============================================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans, 'Inter', system-ui, -apple-system, sans-serif);
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================
+   SEARCH: ANIMATIONS
+   Custom animations for UI feedback
+   ============================================================================ */
+
+/* SLA Critical Pulse Animation */
+@keyframes sla-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+}
+
+.animate-sla-pulse {
+  animation: sla-pulse 1.5s ease-in-out infinite;
+}
+
+/* Subtle glow animation for critical items */
+@keyframes critical-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px hsl(var(--urgent) / 0.3),
+                0 0 10px hsl(var(--urgent) / 0.2),
+                0 0 15px hsl(var(--urgent) / 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px hsl(var(--urgent) / 0.5),
+                0 0 20px hsl(var(--urgent) / 0.3),
+                0 0 30px hsl(var(--urgent) / 0.2);
+  }
+}
+
+.animate-critical-glow {
+  animation: critical-glow 2s ease-in-out infinite;
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+/* Slide in from right */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out forwards;
+}
+
+/* Skeleton loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted-foreground) / 0.1) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ============================================================================
+   SEARCH: SCROLLBAR_STYLES
+   Custom scrollbar styling
+   ============================================================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--border-hover));
+}
+
+/* ============================================================================
+   SEARCH: UTILITY_CLASSES
+   Custom utility classes
+   ============================================================================ */
+
+/* Glassmorphism effect */
+.glass {
+  background: hsl(var(--card) / 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border) / 0.5);
+}
+
+/* Card with subtle gradient border */
+.card-gradient-border {
+  position: relative;
+  background: hsl(var(--card));
+  border-radius: 12px;
+}
+
+.card-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--primary) / 0.3),
+    hsl(var(--accent) / 0.3)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Text gradient */
+.text-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Priority indicator dot */
+.priority-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.priority-dot-p1 { background: hsl(var(--urgent)); }
+.priority-dot-p2 { background: hsl(var(--high)); }
+.priority-dot-p3 { background: hsl(var(--medium)); }
+.priority-dot-p4 { background: hsl(var(--low)); }
