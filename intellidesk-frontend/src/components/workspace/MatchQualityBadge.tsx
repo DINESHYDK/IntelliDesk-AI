@@ -7,7 +7,7 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle2, AlertCircle, HelpCircle, Sparkles } from 'lucide-react';
+import { CheckCircle2, AlertCircle, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface MatchQualityBadgeProps {
@@ -36,28 +36,28 @@ const matchConfig: Record<MatchLevel, {
     label: 'Perfect Match',
     description: 'High confidence auto-response ready',
     icon: <CheckCircle2 className="w-5 h-5" />,
-    bg: 'bg-emerald-500/15',
-    text: 'text-emerald-400',
-    border: 'border-emerald-500/40',
-    glow: 'shadow-emerald-500/20',
+    bg: 'bg-confidence-high/15',
+    text: 'text-confidence-high',
+    border: 'border-confidence-high/40',
+    glow: 'shadow-confidence-high/20',
   },
   partial: {
     label: 'Partial Match',
     description: 'Review suggested before sending',
     icon: <AlertCircle className="w-5 h-5" />,
-    bg: 'bg-amber-500/15',
-    text: 'text-amber-400',
-    border: 'border-amber-500/40',
-    glow: 'shadow-amber-500/20',
+    bg: 'bg-warning/15',
+    text: 'text-warning',
+    border: 'border-warning/40',
+    glow: 'shadow-warning/20',
   },
   review: {
     label: 'Needs Review',
     description: 'Human review required',
     icon: <HelpCircle className="w-5 h-5" />,
-    bg: 'bg-slate-500/15',
-    text: 'text-slate-400',
-    border: 'border-slate-500/40',
-    glow: 'shadow-slate-500/20',
+    bg: 'bg-muted',
+    text: 'text-muted-foreground',
+    border: 'border-border',
+    glow: 'shadow-muted/20',
   },
 };
 
@@ -89,7 +89,7 @@ export function MatchQualityBadge({ confidence, size = 'md' }: MatchQualityBadge
           <span className={cn('font-bold', config.text)}>{confidence}%</span>
         </div>
         {size !== 'sm' && (
-          <span className="text-xs text-slate-400">{config.description}</span>
+          <span className="text-xs text-muted-foreground">{config.description}</span>
         )}
       </div>
     </div>

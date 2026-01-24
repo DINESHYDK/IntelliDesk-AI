@@ -90,6 +90,14 @@ export function formatSLACompact(deadline: string): string {
 /**
  * Get CSS classes for priority badge
  */
+// ============================================================================
+// SEARCH: PRIORITY_STYLES
+// Priority-based styling utilities
+// ============================================================================
+
+/**
+ * Get CSS classes for priority badge
+ */
 export function getPriorityStyles(priority: Priority): {
   bg: string;
   text: string;
@@ -98,28 +106,28 @@ export function getPriorityStyles(priority: Priority): {
 } {
   const styles: Record<Priority, { bg: string; text: string; border: string; dot: string }> = {
     P1: {
-      bg: 'bg-[hsl(var(--urgent-bg))]',
-      text: 'text-[hsl(var(--urgent))]',
-      border: 'border-[hsl(var(--urgent)/0.5)]',
-      dot: 'bg-[hsl(var(--urgent))]',
+      bg: 'bg-urgent/15',
+      text: 'text-urgent',
+      border: 'border-urgent/50',
+      dot: 'bg-urgent',
     },
     P2: {
-      bg: 'bg-[hsl(var(--high-bg))]',
-      text: 'text-[hsl(var(--high))]',
-      border: 'border-[hsl(var(--high)/0.5)]',
-      dot: 'bg-[hsl(var(--high))]',
+      bg: 'bg-high/15',
+      text: 'text-high',
+      border: 'border-high/50',
+      dot: 'bg-high',
     },
     P3: {
-      bg: 'bg-[hsl(var(--medium-bg))]',
-      text: 'text-[hsl(var(--medium))]',
-      border: 'border-[hsl(var(--medium)/0.5)]',
-      dot: 'bg-[hsl(var(--medium))]',
+      bg: 'bg-medium/15',
+      text: 'text-medium',
+      border: 'border-medium/50',
+      dot: 'bg-medium',
     },
     P4: {
-      bg: 'bg-[hsl(var(--low-bg))]',
-      text: 'text-[hsl(var(--low))]',
-      border: 'border-[hsl(var(--low)/0.5)]',
-      dot: 'bg-[hsl(var(--low))]',
+      bg: 'bg-low/15',
+      text: 'text-low',
+      border: 'border-low/50',
+      dot: 'bg-low',
     },
   };
   return styles[priority];
@@ -154,21 +162,21 @@ export function getTierStyles(tier: CustomerTier): {
 } {
   const styles: Record<CustomerTier, { bg: string; text: string; border: string; icon: string }> = {
     Gold: {
-      bg: 'bg-[hsl(var(--tier-gold-bg))]',
-      text: 'text-[hsl(var(--tier-gold))]',
-      border: 'border-[hsl(var(--tier-gold)/0.5)]',
+      bg: 'bg-tier-gold/15',
+      text: 'text-tier-gold',
+      border: 'border-tier-gold/50',
       icon: '👑',
     },
     Silver: {
-      bg: 'bg-[hsl(var(--tier-silver-bg))]',
-      text: 'text-[hsl(var(--tier-silver))]',
-      border: 'border-[hsl(var(--tier-silver)/0.5)]',
+      bg: 'bg-tier-silver/15',
+      text: 'text-tier-silver',
+      border: 'border-tier-silver/50',
       icon: '⭐',
     },
     Bronze: {
-      bg: 'bg-[hsl(var(--tier-bronze-bg))]',
-      text: 'text-[hsl(var(--tier-bronze))]',
-      border: 'border-[hsl(var(--tier-bronze)/0.5)]',
+      bg: 'bg-tier-bronze/15',
+      text: 'text-tier-bronze',
+      border: 'border-tier-bronze/50',
       icon: '🥉',
     },
   };
@@ -195,9 +203,9 @@ export function getConfidenceStyles(confidence: number): {
   const isHigh = confidence >= 80;
   
   return {
-    bg: isHigh ? 'bg-[hsl(var(--confidence-high-bg))]' : 'bg-[hsl(var(--confidence-low-bg))]',
-    text: isHigh ? 'text-[hsl(var(--confidence-high))]' : 'text-[hsl(var(--confidence-low))]',
-    border: isHigh ? 'border-[hsl(var(--confidence-high)/0.5)]' : 'border-[hsl(var(--confidence-low)/0.5)]',
+    bg: isHigh ? 'bg-confidence-high/15' : 'bg-confidence-low/15',
+    text: isHigh ? 'text-confidence-high' : 'text-confidence-low',
+    border: isHigh ? 'border-confidence-high/50' : 'border-confidence-low/50',
     label: isHigh ? 'Auto-classified' : 'Needs Review',
     needsReview: !isHigh,
   };
@@ -220,24 +228,24 @@ export function getSentimentStyles(sentiment: string): {
   
   if (normalizedSentiment === 'happy' || normalizedSentiment === 'positive') {
     return {
-      bg: 'bg-[hsl(var(--sentiment-happy)/0.15)]',
-      text: 'text-[hsl(var(--sentiment-happy))]',
+      bg: 'bg-sentiment-happy/15',
+      text: 'text-sentiment-happy',
       emoji: '😊',
     };
   }
   
   if (normalizedSentiment === 'frustrated' || normalizedSentiment === 'negative' || normalizedSentiment === 'angry') {
     return {
-      bg: 'bg-[hsl(var(--sentiment-frustrated)/0.15)]',
-      text: 'text-[hsl(var(--sentiment-frustrated))]',
+      bg: 'bg-sentiment-frustrated/15',
+      text: 'text-sentiment-frustrated',
       emoji: '😤',
     };
   }
   
   // Neutral default
   return {
-    bg: 'bg-[hsl(var(--sentiment-neutral)/0.15)]',
-    text: 'text-[hsl(var(--sentiment-neutral))]',
+    bg: 'bg-sentiment-neutral/15',
+    text: 'text-sentiment-neutral',
     emoji: '😐',
   };
 }

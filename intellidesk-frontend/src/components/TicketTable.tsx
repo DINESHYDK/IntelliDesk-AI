@@ -9,7 +9,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import {
   AlertTriangle,
   Clock,
-  Crown,
   Eye,
   Search,
   Filter,
@@ -22,7 +21,15 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { Ticket, Priority } from '@/types';
-import { formatTimestamp, extractEmailDomain, calculateSLAStatus, cn } from '@/lib/utils';
+import { 
+  formatTimestamp, 
+  extractEmailDomain, 
+  calculateSLAStatus, 
+  cn,
+  getPriorityStyles, 
+  getTierStyles,
+  getConfidenceStyles
+} from '@/lib/utils';
 import { TicketWorkspace } from './workspace';
 import { usePagination } from '@/components/hooks/use-pagination';
 import {
@@ -41,21 +48,6 @@ interface TicketTableProps {
 
 type SortField = 'priority' | 'sla' | 'timestamp' | 'customer_tier';
 type SortDirection = 'asc' | 'desc';
-
-// Priority badge styles
-const priorityStyles: Record<Priority, { border: string; text: string; bg: string }> = {
-  P1: { border: 'border-red-500/50', text: 'text-red-500', bg: 'bg-red-500/10' },
-  P2: { border: 'border-orange-500/50', text: 'text-orange-500', bg: 'bg-orange-500/10' },
-  P3: { border: 'border-blue-500/50', text: 'text-blue-500', bg: 'bg-blue-500/10' },
-  P4: { border: 'border-slate-500/50', text: 'text-slate-400', bg: 'bg-slate-500/10' },
-};
-
-// Tier styles
-const tierStyles: Record<string, { icon: string; text: string; bg: string }> = {
-  Gold: { icon: '👑', text: 'text-amber-400', bg: 'bg-amber-500/10' },
-  Silver: { icon: '⭐', text: 'text-slate-300', bg: 'bg-slate-500/10' },
-  Bronze: { icon: '🥉', text: 'text-orange-300', bg: 'bg-orange-500/10' },
-};
 
 export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
   const [workspaceTicket, setWorkspaceTicket] = useState<Ticket | null>(null);
@@ -140,11 +132,11 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
   // Loading skeleton
   if (isLoading) {
     return (
-      <div className="p-6 bg-slate-950 rounded-xl space-y-3">
+      <div className="p-6 bg-card rounded-xl space-y-3">
         {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
-            className="h-16 rounded-lg bg-slate-900 border border-slate-800 animate-pulse"
+            className="h-16 rounded-lg bg-muted border border-border animate-pulse"
           />
         ))}
       </div>
@@ -152,13 +144,13 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
   }
 
   return (
-    <div className="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
+    <div className="bg-card rounded-xl border border-border overflow-hidden">
       {/* Filters & Search Bar */}
-      <div className="p-6 border-b border-slate-800">
+      <div className="p-6 border-b border-border">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           {/* Search */}
           <div className="relative flex-1 max-w-md w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search tickets..."
@@ -166,9 +158,9 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
               onChange={(e) => setSearchQuery(e.target.value)}
               className={cn(
                 'w-full pl-10 pr-4 py-2.5 rounded-lg border',
-                'bg-slate-900 border-slate-700',
-                'text-white placeholder:text-slate-500',
-                'focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50',
+                'bg-background border-input',
+                'text-foreground placeholder:text-muted-foreground',
+                'focus:outline-none focus:ring-2 focus:ring-ring focus:border-input',
                 'transition-all text-sm'
               )}
             />
@@ -176,7 +168,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
 
           {/* Priority Filter */}
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-slate-500" />
+            <Filter className="w-4 h-4 text-muted-foreground" />
             {(['all', 'P1', 'P2', 'P3', 'P4'] as const).map((p) => (
               <button
                 key={p}
@@ -184,8 +176,8 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                 className={cn(
                   'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
                   priorityFilter === p
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
                 )}
               >
                 {p === 'all' ? 'All' : p}
@@ -196,9 +188,9 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
       </div>
 
       {/* Table Header */}
-      <div className="hidden lg:grid lg:grid-cols-12 gap-4 px-6 py-3 bg-slate-900/50 border-b border-slate-800">
+      <div className="hidden lg:grid lg:grid-cols-12 gap-4 px-6 py-3 bg-muted/50 border-b border-border">
         <div
-          className="col-span-1 flex items-center gap-1 cursor-pointer text-xs font-bold text-slate-500 uppercase tracking-wider hover:text-slate-300 transition-colors"
+          className="col-span-1 flex items-center gap-1 cursor-pointer text-xs font-bold text-muted-foreground uppercase tracking-wider hover:text-foreground transition-colors"
           onClick={() => handleSort('priority')}
         >
           Priority
@@ -206,14 +198,14 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
             sortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />
           )}
         </div>
-        <div className="col-span-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
+        <div className="col-span-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">
           Subject
         </div>
-        <div className="col-span-2 text-xs font-bold text-slate-500 uppercase tracking-wider">
+        <div className="col-span-2 text-xs font-bold text-muted-foreground uppercase tracking-wider">
           Classification
         </div>
         <div
-          className="col-span-2 flex items-center gap-1 cursor-pointer text-xs font-bold text-slate-500 uppercase tracking-wider hover:text-slate-300 transition-colors"
+          className="col-span-2 flex items-center gap-1 cursor-pointer text-xs font-bold text-muted-foreground uppercase tracking-wider hover:text-foreground transition-colors"
           onClick={() => handleSort('customer_tier')}
         >
           Customer
@@ -222,7 +214,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
           )}
         </div>
         <div
-          className="col-span-2 flex items-center gap-1 cursor-pointer text-xs font-bold text-slate-500 uppercase tracking-wider hover:text-slate-300 transition-colors"
+          className="col-span-2 flex items-center gap-1 cursor-pointer text-xs font-bold text-muted-foreground uppercase tracking-wider hover:text-foreground transition-colors"
           onClick={() => handleSort('sla')}
         >
           SLA Timer
@@ -230,33 +222,33 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
             sortDirection === 'asc' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />
           )}
         </div>
-        <div className="col-span-1 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">
+        <div className="col-span-1 text-xs font-bold text-muted-foreground uppercase tracking-wider text-center">
           Actions
         </div>
       </div>
 
       {/* Ticket Rows */}
-      <div className="divide-y divide-slate-800">
+      <div className="divide-y divide-border">
         {processedTickets.length === 0 ? (
-          <div className="text-center py-16 text-slate-500">
+          <div className="text-center py-16 text-muted-foreground">
             <Mail className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p className="text-lg font-medium text-slate-400">No tickets found</p>
+            <p className="text-lg font-medium text-foreground">No tickets found</p>
             <p className="text-sm">Try adjusting your filters</p>
           </div>
         ) : (
           displayedTickets.map((ticket) => {
             const slaStatus = calculateSLAStatus(ticket.sla_deadline);
-            const pStyle = priorityStyles[ticket.priority];
-            const tStyle = tierStyles[ticket.customer_tier] || tierStyles.Bronze;
-            const isHighConfidence = ticket.ai_analysis.confidence >= 80;
+            const pStyle = getPriorityStyles(ticket.priority);
+            const tStyle = getTierStyles(ticket.customer_tier);
+            const cStyle = getConfidenceStyles(ticket.ai_analysis.confidence);
 
             return (
               <div
                 key={ticket.id}
                 onClick={() => setWorkspaceTicket(ticket)}
                 className={cn(
-                  'bg-slate-900 hover:bg-slate-800/80 transition-all duration-200 cursor-pointer',
-                  slaStatus.isBreached && 'bg-red-950/20 hover:bg-red-950/30 border-l-2 border-l-red-500'
+                  'bg-card hover:bg-card-hover transition-all duration-200 cursor-pointer',
+                  slaStatus.isBreached && 'bg-destructive/10 hover:bg-destructive/20 border-l-2 border-l-destructive'
                 )}
               >
                 {/* Desktop Row */}
@@ -277,19 +269,19 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                   {/* Subject & Sender */}
                   <div className="col-span-4 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-sm font-semibold text-white truncate">
+                      <h3 className="text-sm font-semibold text-foreground truncate">
                         {ticket.subject}
                       </h3>
                       {ticket.thread_count > 1 && (
-                        <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 text-xs flex-shrink-0">
+                        <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-primary/10 text-primary text-xs flex-shrink-0">
                           <GitMerge className="w-3 h-3" />
                           {ticket.thread_count}
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-slate-400">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span className="truncate">{ticket.sender}</span>
-                      <span className="text-slate-600">•</span>
+                      <span className="text-muted-foreground/60">•</span>
                       <span className="flex-shrink-0">{formatTimestamp(ticket.timestamp)}</span>
                     </div>
                   </div>
@@ -298,9 +290,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                   <div className="col-span-2">
                     <div className={cn(
                       'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg',
-                      isHighConfidence
-                        ? 'bg-green-500/10 text-green-400'
-                        : 'bg-amber-500/10 text-amber-400'
+                      cStyle.bg, cStyle.text
                     )}>
                       <Sparkles className="w-3.5 h-3.5" />
                       <span className="text-xs font-medium truncate">
@@ -325,7 +315,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                         </span>
                       </div>
                     </div>
-                    <p className="text-xs text-slate-500 mt-1 truncate">
+                    <p className="text-xs text-muted-foreground mt-1 truncate">
                       {extractEmailDomain(ticket.sender)}
                     </p>
                   </div>
@@ -333,15 +323,15 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                   {/* SLA Timer */}
                   <div className="col-span-2">
                     {slaStatus.isBreached ? (
-                      <div className="flex items-center gap-1.5 text-red-500">
+                      <div className="flex items-center gap-1.5 text-destructive">
                         <AlertTriangle className="w-4 h-4" />
                         <span className="text-xs font-bold uppercase">Breached</span>
                       </div>
                     ) : (
                       <div className={cn(
                         'flex items-center gap-1.5 text-sm',
-                        slaStatus.isCritical ? 'text-red-400' :
-                          slaStatus.isWarning ? 'text-orange-400' : 'text-white'
+                        slaStatus.isCritical ? 'text-urgent' :
+                          slaStatus.isWarning ? 'text-high' : 'text-foreground'
                       )}>
                         <Clock className="w-4 h-4" />
                         <span className="font-semibold">{slaStatus.displayText}</span>
@@ -358,7 +348,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                       }}
                       className={cn(
                         'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium',
-                        'text-blue-400 hover:text-blue-300 hover:bg-blue-500/10',
+                        'text-primary hover:text-primary-foreground hover:bg-primary',
                         'transition-all'
                       )}
                     >
@@ -380,10 +370,10 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                       <span className={cn('text-xs font-bold', pStyle.text)}>{ticket.priority}</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-white line-clamp-2">
+                      <h3 className="text-sm font-semibold text-foreground line-clamp-2">
                         {ticket.subject}
                       </h3>
-                      <p className="text-xs text-slate-400 mt-1 truncate">
+                      <p className="text-xs text-muted-foreground mt-1 truncate">
                         {ticket.sender}
                       </p>
                     </div>
@@ -393,7 +383,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                   <div className="flex flex-wrap items-center gap-2">
                     <div className={cn(
                       'inline-flex items-center gap-1 px-2 py-1 rounded',
-                      isHighConfidence ? 'bg-green-500/10 text-green-400' : 'bg-amber-500/10 text-amber-400'
+                      cStyle.bg, cStyle.text
                     )}>
                       <Sparkles className="w-3 h-3" />
                       <span className="text-xs font-medium">{ticket.ai_analysis.category}</span>
@@ -408,15 +398,15 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                   {/* Bottom Row: SLA + Open Button */}
                   <div className="flex items-center justify-between">
                     {slaStatus.isBreached ? (
-                      <div className="flex items-center gap-1.5 text-red-500">
+                      <div className="flex items-center gap-1.5 text-destructive">
                         <AlertTriangle className="w-4 h-4" />
                         <span className="text-xs font-bold uppercase">Breached</span>
                       </div>
                     ) : (
                       <div className={cn(
                         'flex items-center gap-1.5 text-sm',
-                        slaStatus.isCritical ? 'text-red-400' :
-                          slaStatus.isWarning ? 'text-orange-400' : 'text-white'
+                        slaStatus.isCritical ? 'text-urgent' :
+                          slaStatus.isWarning ? 'text-high' : 'text-foreground'
                       )}>
                         <Clock className="w-4 h-4" />
                         <span className="font-semibold">{slaStatus.displayText}</span>
@@ -427,7 +417,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                         e.stopPropagation();
                         setWorkspaceTicket(ticket);
                       }}
-                      className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 transition-all"
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-primary hover:text-primary-foreground hover:bg-primary transition-all"
                     >
                       <Eye className="w-4 h-4" />
                       Open
@@ -441,8 +431,8 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
       </div>
 
       {/* Footer with Pagination */}
-      <div className="px-6 py-4 bg-slate-900/50 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p className="text-xs text-slate-500 text-center md:text-left">
+      <div className="px-6 py-4 bg-muted/50 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
+        <p className="text-xs text-muted-foreground text-center md:text-left">
           Showing {displayedTickets.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to{' '}
           {Math.min(currentPage * itemsPerPage, processedTickets.length)} of {processedTickets.length} tickets
         </p>
@@ -452,13 +442,13 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
             <PaginationContent>
               <PaginationItem>
                 <Button
-                  variant="outline" // Using outline to match dark theme better with border
+                  variant="outline"
                   size="icon"
-                  className="h-8 w-8 bg-slate-800 border-slate-700 hover:bg-slate-700"
+                  className="h-8 w-8 bg-card border-input hover:bg-muted"
                   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                 >
-                  <ChevronLeft className="h-4 w-4 text-slate-400" />
+                  <ChevronLeft className="h-4 w-4 text-muted-foreground" />
                 </Button>
               </PaginationItem>
 
@@ -466,14 +456,14 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                 <>
                   <PaginationItem>
                     <PaginationLink
-                      className="h-8 w-8 bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white"
+                      className="h-8 w-8 bg-card border-input text-muted-foreground hover:bg-muted hover:text-foreground"
                       onClick={() => setCurrentPage(1)}
                     >
                       1
                     </PaginationLink>
                   </PaginationItem>
                   <PaginationItem>
-                    <PaginationEllipsis className="text-slate-500" />
+                    <PaginationEllipsis className="text-muted-foreground" />
                   </PaginationItem>
                 </>
               )}
@@ -486,8 +476,8 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                     className={cn(
                       "h-8 w-8",
                       currentPage === page
-                        ? "bg-blue-600 text-white border-blue-500 hover:bg-blue-500 hover:text-white"
-                        : "bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white"
+                        ? "bg-primary text-primary-foreground border-primary hover:bg-primary/90"
+                        : "bg-card border-input text-muted-foreground hover:bg-muted hover:text-foreground"
                     )}
                   >
                     {page}
@@ -498,11 +488,11 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
               {showRightEllipsis && (
                 <>
                   <PaginationItem>
-                    <PaginationEllipsis className="text-slate-500" />
+                    <PaginationEllipsis className="text-muted-foreground" />
                   </PaginationItem>
                   <PaginationItem>
                     <PaginationLink
-                      className="h-8 w-8 bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white"
+                      className="h-8 w-8 bg-card border-input text-muted-foreground hover:bg-muted hover:text-foreground"
                       onClick={() => setCurrentPage(totalPages)}
                     >
                       {totalPages}
@@ -515,11 +505,11 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-8 w-8 bg-slate-800 border-slate-700 hover:bg-slate-700"
+                  className="h-8 w-8 bg-card border-input hover:bg-muted"
                   onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
                 >
-                  <ChevronRight className="h-4 w-4 text-slate-400" />
+                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </Button>
               </PaginationItem>
             </PaginationContent>

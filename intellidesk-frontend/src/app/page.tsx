@@ -153,7 +153,7 @@ export default function DashboardPage() {
             IntelliDesk AI • Intelligent Email Support Dashboard
           </p>
           <p className="mt-1">
-            Built for Hackathon 2024 • Powered by AI Classification & n8n Workflows
+            Built for Agglomeration 2.0 @2026 <br />Powered by AI Classification & n8n Workflows
           </p>
         </div>
       </footer>

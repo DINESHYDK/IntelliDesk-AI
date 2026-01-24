@@ -53,14 +53,14 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
     <>
       {/* Fixed backdrop that covers everything */}
       <div 
-        className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm"
+        className="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Modal - Centered with fixed position */}
       <div 
         className={cn(
-          'fixed z-[101] bg-slate-900 shadow-2xl border border-slate-700',
+          'fixed z-[101] bg-card shadow-2xl border border-border',
           'flex flex-col overflow-hidden',
           isFullscreen 
             ? 'inset-0' 
@@ -68,26 +68,26 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
         )}
       >
         {/* Header Bar */}
-        <header className="h-14 flex-shrink-0 flex items-center justify-between px-4 bg-slate-800 border-b border-slate-700">
+        <header className="h-14 flex-shrink-0 flex items-center justify-between px-4 bg-muted/50 border-b border-border">
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-colors border border-border"
             >
               <ChevronLeft className="w-4 h-4" />
               <span className="text-sm font-medium hidden sm:inline">Back to Queue</span>
             </button>
-            <span className="hidden sm:block text-sm text-slate-400 font-mono">{ticket.id}</span>
+            <span className="hidden sm:block text-sm text-muted-foreground font-mono">{ticket.id}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowSidebar(!showSidebar)}
               className={cn(
-                'hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
+                'hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border',
                 showSidebar
-                  ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                  : 'bg-slate-700/50 hover:bg-slate-700 text-slate-400'
+                  ? 'bg-primary/10 text-primary border-primary/20'
+                  : 'bg-card text-muted-foreground border-border hover:bg-muted'
               )}
             >
               <Users className="w-4 h-4" />
@@ -96,14 +96,14 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
 
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="hidden sm:flex p-2 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+              className="hidden sm:flex p-2 rounded-lg bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-colors border border-border"
             >
               {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
 
             <button
               onClick={onClose}
-              className="p-2 rounded-lg bg-slate-700/50 hover:bg-red-500/20 text-slate-400 hover:text-red-400 transition-colors"
+              className="p-2 rounded-lg bg-card hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors border border-border hover:border-destructive/30"
             >
               <X className="w-5 h-5" />
             </button>
@@ -111,14 +111,14 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
         </header>
 
         {/* Mobile Tab Navigation */}
-        <nav className="lg:hidden h-11 flex-shrink-0 flex border-b border-slate-700 bg-slate-800/50">
+        <nav className="lg:hidden h-11 flex-shrink-0 flex border-b border-border bg-muted/30">
           <button
             onClick={() => setActiveTab('email')}
             className={cn(
               'flex-1 flex items-center justify-center gap-1.5 text-sm font-medium transition-colors',
               activeTab === 'email'
-                ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-500/10'
-                : 'text-slate-400'
+                ? 'text-primary border-b-2 border-primary bg-primary/5'
+                : 'text-muted-foreground'
             )}
           >
             <Mail className="w-4 h-4" />
@@ -129,8 +129,8 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
             className={cn(
               'flex-1 flex items-center justify-center gap-1.5 text-sm font-medium transition-colors',
               activeTab === 'response'
-                ? 'text-purple-400 border-b-2 border-purple-400 bg-purple-500/10'
-                : 'text-slate-400'
+                ? 'text-accent border-b-2 border-accent bg-accent/5'
+                : 'text-muted-foreground'
             )}
           >
             <Sparkles className="w-4 h-4" />
@@ -141,8 +141,8 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
             className={cn(
               'flex-1 flex items-center justify-center gap-1.5 text-sm font-medium transition-colors',
               activeTab === 'customer'
-                ? 'text-emerald-400 border-b-2 border-emerald-400 bg-emerald-500/10'
-                : 'text-slate-400'
+                ? 'text-success border-b-2 border-success bg-success/5'
+                : 'text-muted-foreground'
             )}
           >
             <Users className="w-4 h-4" />
@@ -155,7 +155,7 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
           {/* Desktop Layout */}
           <div className="hidden lg:contents">
             {/* Email Panel */}
-            <section className="flex-1 overflow-y-auto border-r border-slate-700">
+            <section className="flex-1 overflow-y-auto border-r border-border">
               <EmailPanel ticket={ticket} />
             </section>
 
@@ -166,7 +166,7 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
 
             {/* Customer Sidebar */}
             {showSidebar && (
-              <aside className="w-72 xl:w-80 flex-shrink-0 overflow-y-auto border-l border-slate-700">
+              <aside className="w-72 xl:w-80 flex-shrink-0 overflow-y-auto border-l border-border bg-card/30">
                 <CustomerSidebar ticket={ticket} />
               </aside>
             )}
