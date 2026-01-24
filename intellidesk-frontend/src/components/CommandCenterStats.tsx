@@ -255,9 +255,8 @@ export function CommandCenterStats({
 				</div>
 				<div className="flex items-center justify-between mb-3">
 					{/* Pending */}
-					<div className="text-center">
-						<div className="flex items-center gap-1.5 text-warning mb-1">
-							<Loader2 className="w-4 h-4 animate-spin" />
+					<div className="text-center flex-1">
+						<div className="text-warning mb-1">
 							<span className="text-2xl font-bold">
 								{metrics.statusCounts.pending}
 							</span>
@@ -269,9 +268,8 @@ export function CommandCenterStats({
 					{/* Divider */}
 					<div className="h-10 w-px bg-border" />
 					{/* Resolved */}
-					<div className="text-center">
-						<div className="flex items-center gap-1.5 text-success mb-1">
-							<CheckCircle2 className="w-4 h-4" />
+					<div className="text-center flex-1">
+						<div className="text-success mb-1">
 							<span className="text-2xl font-bold">
 								{metrics.statusCounts.resolved}
 							</span>
@@ -280,21 +278,6 @@ export function CommandCenterStats({
 							Resolved
 						</span>
 					</div>
-				</div>
-				{/* Progress bar */}
-				<div className="h-2 w-full bg-muted rounded-full overflow-hidden flex">
-					<div
-						className="h-full bg-warning transition-all duration-500"
-						style={{
-							width: `${metrics.totalTickets > 0 ? (metrics.statusCounts.pending / metrics.totalTickets) * 100 : 0}%`,
-						}}
-					/>
-					<div
-						className="h-full bg-success transition-all duration-500"
-						style={{
-							width: `${metrics.totalTickets > 0 ? (metrics.statusCounts.resolved / metrics.totalTickets) * 100 : 0}%`,
-						}}
-					/>
 				</div>
 			</div>
 

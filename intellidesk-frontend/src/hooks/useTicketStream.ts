@@ -61,6 +61,10 @@ export function useTicketStream(): UseTicketStreamReturn {
 		if (!isMounted.current) return;
 
 		try {
+			// Only set loading if we don't have tickets yet, OR if we want to show a spinner on refresh.
+			// Since DashboardPage only shows full skeleton if (loading && tickets.length === 0),
+			// we can safely set loading to true here to trigger the header spinner without hiding the content.
+			setLoading(true);
 			setError(null);
 
 			// Fetch active tickets (exclude closed if strictly following "Incoming queue" rule, but prompt says "hide status='Closed' tickets from the main 'Incoming' queue but allow them to be searchable")
@@ -135,12 +139,12 @@ export function useTicketStream(): UseTicketStreamReturn {
 }
 
 export function usePollingStatus() {
-	const [nextPollIn, setNextPollIn] = useState<number>(5);
+	const [nextPollIn, setNextPollIn] = useState<number>(30);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setNextPollIn((prev) => {
-				if (prev <= 1) return 5;
+				if (prev <= 1) return 30;
 				return prev - 1;
 			});
 		}, 1000);
