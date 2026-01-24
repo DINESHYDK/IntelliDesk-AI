@@ -4,313 +4,394 @@
 // High-density AI Intelligence & Ticket Distribution Summary
 // ============================================================================
 
-'use client';
+"use client";
 
-import React, { useMemo } from 'react';
-import { 
-  Activity,
-  Sparkles,
-  Clock,
-  CheckCircle2,
-  Loader2,
-  PieChart
-} from 'lucide-react';
-import { Ticket, TicketPriority } from '@/types/ticket';
-import { cn } from '@/lib/utils';
+import React, { useMemo } from "react";
+import {
+	Activity,
+	Sparkles,
+	Clock,
+	CheckCircle2,
+	Loader2,
+	PieChart,
+} from "lucide-react";
+import { Ticket, TicketPriority } from "@/types/ticket";
+import { cn } from "@/lib/utils";
 
 interface CommandCenterStatsProps {
-  tickets: Ticket[];
-  isLoading?: boolean;
+	tickets: Ticket[];
+	isLoading?: boolean;
 }
 
 // Mini progress bar component
-function MiniProgress({ value, max, color }: { value: number; max: number; color: string }) {
-  const percentage = max > 0 ? (value / max) * 100 : 0;
-  return (
-    <div className='h-1.5 w-full bg-muted rounded-full overflow-hidden'>
-      <div 
-        className={cn('h-full rounded-full transition-all duration-500', color)}
-        style={{ width: `${percentage}%` }}
-      />
-    </div>
-  );
+function MiniProgress({
+	value,
+	max,
+	color,
+}: {
+	value: number;
+	max: number;
+	color: string;
+}) {
+	const percentage = max > 0 ? (value / max) * 100 : 0;
+	return (
+		<div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+			<div
+				className={cn("h-full rounded-full transition-all duration-500", color)}
+				style={{ width: `${percentage}%` }}
+			/>
+		</div>
+	);
 }
 
 // Animated pulse dot
 function PulseDot({ color }: { color: string }) {
-  return (
-    <span className='relative flex h-2 w-2'>
-      <span className={cn(
-        'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75',
-        color
-      )}></span>
-      <span className={cn('relative inline-flex rounded-full h-2 w-2', color)}></span>
-    </span>
-  );
+	return (
+		<span className="relative flex h-2 w-2">
+			<span
+				className={cn(
+					"animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
+					color,
+				)}
+			></span>
+			<span
+				className={cn("relative inline-flex rounded-full h-2 w-2", color)}
+			></span>
+		</span>
+	);
 }
 
-export function CommandCenterStats({ tickets, isLoading = false }: CommandCenterStatsProps) {
-  // Calculate all metrics
-  const metrics = useMemo(() => {
-    // Priority counts
-    const priorityCounts: Record<TicketPriority, number> = { P1: 0, P2: 0, P3: 0, P4: 0 };
-    // Category counts (Top 3)
-    const categoryCounts: Record<string, number> = {};
-    // Status counts
-    const statusCounts = { pending: 0, resolved: 0 };
-    // SLA metrics (Mock logic: P1 > 2 hours old = breached, P2 > 8 hours = breached)
-    const slaMetrics = { nearBreach: 0, breached: 0 };
-    // AI confidence
-    let totalConfidence = 0;
+export function CommandCenterStats({
+	tickets,
+	isLoading = false,
+}: CommandCenterStatsProps) {
+	// Calculate all metrics
+	const metrics = useMemo(() => {
+		// Priority counts
+		const priorityCounts: Record<TicketPriority, number> = {
+			P1: 0,
+			P2: 0,
+			P3: 0,
+			P4: 0,
+		};
+		// Category counts (Top 3)
+		const categoryCounts: Record<string, number> = {};
+		// Status counts
+		const statusCounts = { pending: 0, resolved: 0 };
+		// SLA metrics (Mock logic: P1 > 2 hours old = breached, P2 > 8 hours = breached)
+		const slaMetrics = { nearBreach: 0, breached: 0 };
+		// AI confidence
+		let totalConfidence = 0;
 
-    const now = new Date().getTime();
+		const now = new Date().getTime();
 
-    tickets.forEach((ticket) => {
-      // Priority
-      if (priorityCounts[ticket.priority] !== undefined) {
-        priorityCounts[ticket.priority]++;
-      }
-      
-      // Category
-      const cat = ticket.category || 'Unclassified';
-      categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
-      
-      // Status
-      if (ticket.status === 'Resolved' || ticket.status === 'Closed') {
-        statusCounts.resolved++;
-      } else {
-        statusCounts.pending++;
-      }
-      
-      // SLA Logic (Simple heuristic based on created_at)
-      const createdTime = new Date(ticket.created_at).getTime();
-      const ageHours = (now - createdTime) / (1000 * 60 * 60);
-      
-      // Define limits
-      const limits = { P1: 1, P2: 4, P3: 24, P4: 48 };
-      const limit = limits[ticket.priority] || 24;
-      
-      if (ticket.status === 'New' || ticket.status === 'Open') {
-        if (ageHours > limit) {
-          slaMetrics.breached++;
-        } else if (ageHours > limit * 0.8) {
-          slaMetrics.nearBreach++;
-        }
-      }
-      
-      // AI Confidence
-      totalConfidence += ticket.confidence_score || 0;
-    });
+		tickets.forEach((ticket) => {
+			// Priority
+			if (priorityCounts[ticket.priority] !== undefined) {
+				priorityCounts[ticket.priority]++;
+			}
 
-    const avgConfidence = tickets.length > 0 ? Math.round((totalConfidence / tickets.length) * 100) : 0;
-    const totalTickets = tickets.length;
-    
-    // Process categories for display
-    const sortedCategories = Object.entries(categoryCounts)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 3);
+			// Category
+			const cat = ticket.category || "Unclassified";
+			categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
 
-    return {
-      priorityCounts,
-      sortedCategories,
-      statusCounts,
-      slaMetrics,
-      avgConfidence,
-      totalTickets
-    };
-  }, [tickets]);
+			// Status
+			if (ticket.status === "Resolved" || ticket.status === "Closed") {
+				statusCounts.resolved++;
+			} else {
+				statusCounts.pending++;
+			}
 
-  // Loading skeleton
-  if (isLoading) {
-    return (
-      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3'>
-        {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className='h-28 rounded-xl bg-card border border-border animate-shimmer' />
-        ))}
-      </div>
-    );
-  }
+			// SLA Logic (Simple heuristic based on created_at)
+			const createdTime = new Date(ticket.created_at).getTime();
+			const ageHours = (now - createdTime) / (1000 * 60 * 60);
 
-  return (
-    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 animate-fade-in'>
-      
-      {/* 1. Priority Pulse Card */}
-      <div className='col-span-1 p-4 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all'>
-        <div className='flex items-center gap-2 mb-3'>
-          <Activity className='w-4 h-4 text-primary' />
-          <span className='text-xs font-semibold text-muted-foreground uppercase tracking-wider'>Priority Pulse</span>
-        </div>
-        <div className='grid grid-cols-4 gap-2'>
-          {/* P1 */}
-          <div className='text-center'>
-            <div className='w-full aspect-square rounded-lg bg-[hsl(var(--destructive)/0.1)] border border-[hsl(var(--destructive)/0.2)] flex items-center justify-center mb-1'>
-              <span className='text-lg font-bold text-destructive'>{metrics.priorityCounts.P1}</span>
-            </div>
-            <span className='text-[10px] font-medium text-destructive'>P1</span>
-          </div>
-          {/* P2 */}
-          <div className='text-center'>
-            <div className='w-full aspect-square rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-1'>
-              <span className='text-lg font-bold text-orange-500'>{metrics.priorityCounts.P2}</span>
-            </div>
-            <span className='text-[10px] font-medium text-orange-500'>P2</span>
-          </div>
-          {/* P3 */}
-          <div className='text-center'>
-            <div className='w-full aspect-square rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-1'>
-              <span className='text-lg font-bold text-blue-500'>{metrics.priorityCounts.P3}</span>
-            </div>
-            <span className='text-[10px] font-medium text-blue-500'>P3</span>
-          </div>
-          {/* P4 */}
-          <div className='text-center'>
-            <div className='w-full aspect-square rounded-lg bg-slate-500/10 border border-slate-500/20 flex items-center justify-center mb-1'>
-              <span className='text-lg font-bold text-slate-500'>{metrics.priorityCounts.P4}</span>
-            </div>
-            <span className='text-[10px] font-medium text-slate-500'>P4</span>
-          </div>
-        </div>
-      </div>
+			// Define limits
+			const limits = { P1: 1, P2: 4, P3: 24, P4: 48 };
+			const limit = limits[ticket.priority] || 24;
 
-      {/* 2. Category Mix Card (Replaces Customer Mix) */}
-      <div className='col-span-1 p-4 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all'>
-        <div className='flex items-center gap-2 mb-3'>
-          <PieChart className='w-4 h-4 text-primary' />
-          <span className='text-xs font-semibold text-muted-foreground uppercase tracking-wider'>Top Categories</span>
-        </div>
-        <div className='space-y-2.5'>
-          {metrics.sortedCategories.map(([cat, count], idx) => (
-             <div key={cat} className='flex items-center gap-2'>
-             <span className='w-20 text-xs font-medium truncate' title={cat}>
-               {cat}
-             </span>
-             <div className='flex-1'>
-               <MiniProgress 
-                 value={count} 
-                 max={metrics.totalTickets} 
-                 color={idx === 0 ? 'bg-primary' : idx === 1 ? 'bg-primary/70' : 'bg-primary/40'} 
-               />
-             </div>
-             <span className='w-6 text-xs font-bold text-right'>{count}</span>
-           </div>
-          ))}
-          {metrics.sortedCategories.length === 0 && (
-            <div className='text-xs text-muted-foreground text-center py-4'>No data available</div>
-          )}
-        </div>
-      </div>
+			if (ticket.status === "New" || ticket.status === "Open") {
+				if (ageHours > limit) {
+					slaMetrics.breached++;
+				} else if (ageHours > limit * 0.8) {
+					slaMetrics.nearBreach++;
+				}
+			}
 
-      {/* 3. Resolution Progress Card */}
-      <div className='col-span-1 p-4 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all'>
-        <div className='flex items-center gap-2 mb-3'>
-          <CheckCircle2 className='w-4 h-4 text-green-500' />
-          <span className='text-xs font-semibold text-muted-foreground uppercase tracking-wider'>Resolution</span>
-        </div>
-        <div className='flex items-center justify-between mb-3'>
-          {/* Pending */}
-          <div className='text-center'>
-            <div className='flex items-center gap-1.5 text-warning mb-1'>
-              <Loader2 className='w-4 h-4 animate-spin' />
-              <span className='text-2xl font-bold'>{metrics.statusCounts.pending}</span>
-            </div>
-            <span className='text-[10px] text-muted-foreground uppercase'>Pending</span>
-          </div>
-          {/* Divider */}
-          <div className='h-10 w-px bg-border' />
-          {/* Resolved */}
-          <div className='text-center'>
-            <div className='flex items-center gap-1.5 text-success mb-1'>
-              <CheckCircle2 className='w-4 h-4' />
-              <span className='text-2xl font-bold'>{metrics.statusCounts.resolved}</span>
-            </div>
-            <span className='text-[10px] text-muted-foreground uppercase'>Resolved</span>
-          </div>
-        </div>
-        {/* Progress bar */}
-        <div className='h-2 w-full bg-muted rounded-full overflow-hidden flex'>
-          <div 
-            className='h-full bg-warning transition-all duration-500'
-            style={{ width: `${metrics.totalTickets > 0 ? (metrics.statusCounts.pending / metrics.totalTickets) * 100 : 0}%` }}
-          />
-          <div 
-            className='h-full bg-success transition-all duration-500'
-            style={{ width: `${metrics.totalTickets > 0 ? (metrics.statusCounts.resolved / metrics.totalTickets) * 100 : 0}%` }}
-          />
-        </div>
-      </div>
+			// AI Confidence
+			totalConfidence += ticket.confidence_score || 0;
+		});
 
-      {/* 4. AI Accuracy Card */}
-      <div className='col-span-1 p-4 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all'>
-        <div className='flex items-center gap-2 mb-3'>
-          <Sparkles className='w-4 h-4 text-accent' />
-          <span className='text-xs font-semibold text-muted-foreground uppercase tracking-wider'>AI Accuracy</span>
-        </div>
-        <div className='flex items-center gap-3'>
-          {/* Circular progress */}
-          <div className='relative'>
-            <svg className='w-14 h-14 -rotate-90'>
-              <circle
-                cx='28'
-                cy='28'
-                r='24'
-                stroke='currentColor'
-                strokeWidth='4'
-                fill='none'
-                className='text-muted'
-              />
-              <circle
-                cx='28'
-                cy='28'
-                r='24'
-                stroke='currentColor'
-                strokeWidth='4'
-                fill='none'
-                strokeDasharray={`${metrics.avgConfidence * 1.5} 150`}
-                className={cn(
-                  'transition-all duration-1000',
-                  metrics.avgConfidence >= 80 ? 'text-purple-500' : 'text-purple-300'
-                )}
-              />
-            </svg>
-            <span className='absolute inset-0 flex items-center justify-center text-sm font-bold text-foreground'>
-              {metrics.avgConfidence}%
-            </span>
-          </div>
-          <div>
-            <p className={cn(
-              'text-sm font-semibold',
-              metrics.avgConfidence >= 80 ? 'text-purple-500' : 'text-purple-300'
-            )}>
-              {metrics.avgConfidence >= 90 ? 'Excellent' : metrics.avgConfidence >= 80 ? 'Good' : 'Needs Review'}
-            </p>
-            <p className='text-[10px] text-muted-foreground'>Avg. Confidence</p>
-          </div>
-        </div>
-      </div>
+		const avgConfidence =
+			tickets.length > 0
+				? Math.round((totalConfidence / tickets.length) * 100)
+				: 0;
+		const totalTickets = tickets.length;
 
-      {/* 5. SLA Alert Zone Card */}
-      <div className={cn(
-        'col-span-2 md:col-span-1 p-4 rounded-xl backdrop-blur-sm transition-all',
-        metrics.slaMetrics.breached > 0 
-          ? 'bg-destructive/10 border border-destructive/40 hover:border-destructive' 
-          : 'bg-card border border-border hover:border-ring'
-      )}>
-        <div className='flex items-center gap-2 mb-3'>
-          <Clock className='w-4 h-4 text-destructive' />
-          <span className='text-xs font-semibold text-muted-foreground uppercase tracking-wider'>SLA Alert Zone</span>
-          {metrics.slaMetrics.breached > 0 && <PulseDot color='bg-destructive' />}
-        </div>
-        <div className='grid grid-cols-2 gap-3'>
-             <div className='text-center'>
-              <span className='text-2xl font-bold text-destructive'>{metrics.slaMetrics.breached}</span>
-              <p className='text-[10px] font-medium text-destructive'>Breached</p>
-            </div>
-            <div className='text-center'>
-              <span className='text-2xl font-bold text-orange-500'>{metrics.slaMetrics.nearBreach}</span>
-              <p className='text-[10px] font-medium text-orange-500'>At Risk</p>
-            </div>
-        </div>
-      </div>
-    </div>
-  );
+		// Process categories for display
+		const sortedCategories = Object.entries(categoryCounts)
+			.sort(([, a], [, b]) => b - a)
+			.slice(0, 3);
+
+		return {
+			priorityCounts,
+			sortedCategories,
+			statusCounts,
+			slaMetrics,
+			avgConfidence,
+			totalTickets,
+		};
+	}, [tickets]);
+
+	// Loading skeleton
+	if (isLoading) {
+		return (
+			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+				{[1, 2, 3, 4, 5].map((i) => (
+					<div
+						key={i}
+						className="h-28 rounded-xl bg-card border border-border animate-shimmer"
+					/>
+				))}
+			</div>
+		);
+	}
+
+	return (
+		<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 animate-fade-in">
+			{/* 1. Priority Pulse Card */}
+			<div className="col-span-1 p-4 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all">
+				<div className="flex items-center gap-2 mb-3">
+					<Activity className="w-4 h-4 text-primary" />
+					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+						Priority Pulse
+					</span>
+				</div>
+				<div className="grid grid-cols-4 gap-2">
+					{/* P1 */}
+					<div className="text-center">
+						<div className="w-full aspect-square rounded-lg bg-[hsl(var(--destructive)/0.1)] border border-[hsl(var(--destructive)/0.2)] flex items-center justify-center mb-1">
+							<span className="text-lg font-bold text-destructive">
+								{metrics.priorityCounts.P1}
+							</span>
+						</div>
+						<span className="text-[10px] font-medium text-destructive">P1</span>
+					</div>
+					{/* P2 */}
+					<div className="text-center">
+						<div className="w-full aspect-square rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-1">
+							<span className="text-lg font-bold text-orange-500">
+								{metrics.priorityCounts.P2}
+							</span>
+						</div>
+						<span className="text-[10px] font-medium text-orange-500">P2</span>
+					</div>
+					{/* P3 */}
+					<div className="text-center">
+						<div className="w-full aspect-square rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-1">
+							<span className="text-lg font-bold text-blue-500">
+								{metrics.priorityCounts.P3}
+							</span>
+						</div>
+						<span className="text-[10px] font-medium text-blue-500">P3</span>
+					</div>
+					{/* P4 */}
+					<div className="text-center">
+						<div className="w-full aspect-square rounded-lg bg-slate-500/10 border border-slate-500/20 flex items-center justify-center mb-1">
+							<span className="text-lg font-bold text-slate-500">
+								{metrics.priorityCounts.P4}
+							</span>
+						</div>
+						<span className="text-[10px] font-medium text-slate-500">P4</span>
+					</div>
+				</div>
+			</div>
+
+			{/* 2. Category Mix Card (Replaces Customer Mix) */}
+			<div className="col-span-1 p-4 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all">
+				<div className="flex items-center gap-2 mb-3">
+					<PieChart className="w-4 h-4 text-primary" />
+					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+						Top Categories
+					</span>
+				</div>
+				<div className="space-y-2.5">
+					{metrics.sortedCategories.map(([cat, count], idx) => (
+						<div key={cat} className="flex items-center gap-2">
+							<span className="w-20 text-xs font-medium truncate" title={cat}>
+								{cat}
+							</span>
+							<div className="flex-1">
+								<MiniProgress
+									value={count}
+									max={metrics.totalTickets}
+									color={
+										idx === 0
+											? "bg-primary"
+											: idx === 1
+												? "bg-primary/70"
+												: "bg-primary/40"
+									}
+								/>
+							</div>
+							<span className="w-6 text-xs font-bold text-right">{count}</span>
+						</div>
+					))}
+					{metrics.sortedCategories.length === 0 && (
+						<div className="text-xs text-muted-foreground text-center py-4">
+							No data available
+						</div>
+					)}
+				</div>
+			</div>
+
+			{/* 3. Resolution Progress Card */}
+			<div className="col-span-1 p-4 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all">
+				<div className="flex items-center gap-2 mb-3">
+					<CheckCircle2 className="w-4 h-4 text-green-500" />
+					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+						Resolution
+					</span>
+				</div>
+				<div className="flex items-center justify-between mb-3">
+					{/* Pending */}
+					<div className="text-center">
+						<div className="flex items-center gap-1.5 text-warning mb-1">
+							<Loader2 className="w-4 h-4 animate-spin" />
+							<span className="text-2xl font-bold">
+								{metrics.statusCounts.pending}
+							</span>
+						</div>
+						<span className="text-[10px] text-muted-foreground uppercase">
+							Pending
+						</span>
+					</div>
+					{/* Divider */}
+					<div className="h-10 w-px bg-border" />
+					{/* Resolved */}
+					<div className="text-center">
+						<div className="flex items-center gap-1.5 text-success mb-1">
+							<CheckCircle2 className="w-4 h-4" />
+							<span className="text-2xl font-bold">
+								{metrics.statusCounts.resolved}
+							</span>
+						</div>
+						<span className="text-[10px] text-muted-foreground uppercase">
+							Resolved
+						</span>
+					</div>
+				</div>
+				{/* Progress bar */}
+				<div className="h-2 w-full bg-muted rounded-full overflow-hidden flex">
+					<div
+						className="h-full bg-warning transition-all duration-500"
+						style={{
+							width: `${metrics.totalTickets > 0 ? (metrics.statusCounts.pending / metrics.totalTickets) * 100 : 0}%`,
+						}}
+					/>
+					<div
+						className="h-full bg-success transition-all duration-500"
+						style={{
+							width: `${metrics.totalTickets > 0 ? (metrics.statusCounts.resolved / metrics.totalTickets) * 100 : 0}%`,
+						}}
+					/>
+				</div>
+			</div>
+
+			{/* 4. AI Accuracy Card */}
+			<div className="col-span-1 p-4 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all">
+				<div className="flex items-center gap-2 mb-3">
+					<Sparkles className="w-4 h-4 text-accent" />
+					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+						AI Accuracy
+					</span>
+				</div>
+				<div className="flex items-center gap-3">
+					{/* Circular progress */}
+					<div className="relative">
+						<svg className="w-14 h-14 -rotate-90">
+							<circle
+								cx="28"
+								cy="28"
+								r="24"
+								stroke="currentColor"
+								strokeWidth="4"
+								fill="none"
+								className="text-muted"
+							/>
+							<circle
+								cx="28"
+								cy="28"
+								r="24"
+								stroke="currentColor"
+								strokeWidth="4"
+								fill="none"
+								strokeDasharray={`${metrics.avgConfidence * 1.5} 150`}
+								className={cn(
+									"transition-all duration-1000",
+									metrics.avgConfidence >= 80
+										? "text-purple-500"
+										: "text-purple-300",
+								)}
+							/>
+						</svg>
+						<span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-foreground">
+							{metrics.avgConfidence}%
+						</span>
+					</div>
+					<div>
+						<p
+							className={cn(
+								"text-sm font-semibold",
+								metrics.avgConfidence >= 80
+									? "text-purple-500"
+									: "text-purple-300",
+							)}
+						>
+							{metrics.avgConfidence >= 90
+								? "Excellent"
+								: metrics.avgConfidence >= 80
+									? "Good"
+									: "Needs Review"}
+						</p>
+						<p className="text-[10px] text-muted-foreground">Avg. Confidence</p>
+					</div>
+				</div>
+			</div>
+
+			{/* 5. SLA Alert Zone Card */}
+			<div
+				className={cn(
+					"col-span-2 md:col-span-1 p-4 rounded-xl backdrop-blur-sm transition-all",
+					metrics.slaMetrics.breached > 0
+						? "bg-destructive/10 border border-destructive/40 hover:border-destructive"
+						: "bg-card border border-border hover:border-ring",
+				)}
+			>
+				<div className="flex items-center gap-2 mb-3">
+					<Clock className="w-4 h-4 text-destructive" />
+					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+						SLA Alert Zone
+					</span>
+					{metrics.slaMetrics.breached > 0 && (
+						<PulseDot color="bg-destructive" />
+					)}
+				</div>
+				<div className="grid grid-cols-2 gap-3">
+					<div className="text-center">
+						<span className="text-2xl font-bold text-destructive">
+							{metrics.slaMetrics.breached}
+						</span>
+						<p className="text-[10px] font-medium text-destructive">Breached</p>
+					</div>
+					<div className="text-center">
+						<span className="text-2xl font-bold text-orange-500">
+							{metrics.slaMetrics.nearBreach}
+						</span>
+						<p className="text-[10px] font-medium text-orange-500">At Risk</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
