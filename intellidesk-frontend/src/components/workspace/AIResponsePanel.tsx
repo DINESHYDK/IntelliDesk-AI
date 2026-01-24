@@ -20,7 +20,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { Ticket } from '@/types';
-import { cn } from '@/lib/utils';
+import { cn, getSentimentStyles } from '@/lib/utils';
 import { MatchQualityBadge } from './MatchQualityBadge';
 import { Button } from '@/components/ui/button';
 
@@ -55,6 +55,8 @@ export function AIResponsePanel({ ticket }: AIResponsePanelProps) {
 
   const confidence = ticket.ai_analysis.confidence;
 
+  const sentimentStyle = getSentimentStyles(ticket.ai_analysis.sentiment);
+  
   return (
     <div className="flex flex-col h-full bg-card/50">
       {/* Header - Always visible */}
@@ -63,7 +65,7 @@ export function AIResponsePanel({ ticket }: AIResponsePanelProps) {
         <div className="flex items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-lg bg-accent/20">
-              <Sparkles className="w-5 h-5 text-accent" />
+              <Sparkles className="w-5 h-5 text-primary" />
             </div>
             <h2 className="text-lg font-bold text-foreground">AI Response</h2>
           </div>
@@ -72,13 +74,23 @@ export function AIResponsePanel({ ticket }: AIResponsePanelProps) {
 
         {/* Metadata Tags */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="px-2.5 py-1 rounded-lg bg-accent/20 text-accent text-xs font-medium">
+          {/* Category Tag */}
+          <span className="px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-xs font-semibold border border-primary/20">
             {ticket.ai_analysis.category}
           </span>
-          <span className="px-2.5 py-1 rounded-lg bg-muted text-muted-foreground text-xs">
+          
+          {/* Status Tag */}
+          <span className="px-2.5 py-1 rounded-lg bg-secondary text-secondary-foreground text-xs font-medium border border-border">
             Status: {ticket.status}
           </span>
-          <span className="px-2.5 py-1 rounded-lg bg-muted text-muted-foreground text-xs">
+          
+          {/* Sentiment Tag - Dynamic */}
+          <span className={cn(
+            "px-2.5 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 border",
+            sentimentStyle.bg,
+            sentimentStyle.text.replace('text-', 'border-').replace(']', ']/30') /* Hacky border from text color? No, let's just use transparent border or muted */
+          )}>
+            <span>{sentimentStyle.emoji}</span>
             Sentiment: {ticket.ai_analysis.sentiment}
           </span>
         </div>
@@ -90,21 +102,20 @@ export function AIResponsePanel({ ticket }: AIResponsePanelProps) {
           <div className="space-y-5">
             {/* Response Card */}
             <div className={cn(
-              'relative rounded-xl border p-5',
-              'bg-gradient-to-br from-card to-background',
-              'border-accent/30'
+              'relative rounded-xl border p-5 transition-colors',
+              'bg-muted/30 border-border'
             )}>
               {/* AI Badge */}
               <div className="flex items-center gap-2 mb-4 pb-3 border-b border-border">
-                <CheckCircle2 className="w-4 h-4 text-accent" />
-                <span className="text-xs font-medium text-accent">AI Generated Response</span>
+                <CheckCircle2 className="w-4 h-4 text-primary" />
+                <span className="text-xs font-semibold text-primary">AI Generated Response</span>
               </div>
 
               {isEditing ? (
                 <textarea
                   value={editedResponse}
                   onChange={(e) => setEditedResponse(e.target.value)}
-                  className="w-full min-h-[250px] bg-background text-foreground text-sm leading-relaxed resize-none focus:outline-none rounded-lg p-3 border border-border"
+                  className="w-full min-h-[250px] bg-background text-foreground text-sm leading-relaxed resize-none focus:outline-none rounded-lg p-3 border border-input focus:border-ring focus:ring-1 focus:ring-ring transition-all"
                 />
               ) : (
                 <div className="text-foreground text-sm leading-relaxed whitespace-pre-wrap">

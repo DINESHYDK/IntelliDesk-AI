@@ -120,7 +120,7 @@ export function CustomerSidebar({ ticket }: CustomerSidebarProps) {
         </div>
 
         {/* Sentiment History */}
-        <div>
+        {/* <div>
           <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">
             Recent Sentiment
           </h4>
@@ -136,11 +136,11 @@ export function CustomerSidebar({ ticket }: CustomerSidebarProps) {
             ))}
           </div>
           <p className="text-xs text-muted-foreground mt-2">Last 5 interactions</p>
-        </div>
+        </div> */}
       </div>
 
       {/* Action Buttons */}
-      <div className="flex-shrink-0 p-5 border-t border-border space-y-3">
+      {/* <div className="flex-shrink-0 p-5 border-t border-border space-y-3">
         <Button className="w-full gap-2 shadow-lg shadow-primary/25">
           <Phone className="w-4 h-4" />
           Schedule Call
@@ -149,7 +149,7 @@ export function CustomerSidebar({ ticket }: CustomerSidebarProps) {
           <ExternalLink className="w-4 h-4" />
           View Full Profile
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }

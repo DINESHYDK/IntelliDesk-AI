@@ -17,6 +17,7 @@ import {
   User
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ThemeSwitch } from '@/components/ui/theme-switch-button';
 
 interface HeaderProps {
   isLoading?: boolean;
@@ -45,7 +46,7 @@ export function Header({
         'border-b border-[hsl(var(--border))]'
       )}
     >
-      <div className="container mx-auto px-4 py-3">
+      <div className="w-full max-w-[1600px] mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo & Branding */}
           <div className="flex items-center gap-3">
@@ -135,6 +136,11 @@ export function Header({
                 2
               </span>
             </button>
+
+            {/* Theme Toggle */}
+            <div className="hidden sm:block">
+              <ThemeSwitch />
+            </div>
 
             {/* User Avatar */}
             <button 

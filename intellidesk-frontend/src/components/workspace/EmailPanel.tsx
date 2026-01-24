@@ -95,7 +95,7 @@ export function EmailPanel({ ticket }: EmailPanelProps) {
       {/* Email Body - Scrollable */}
       <div className="flex-1 overflow-y-auto p-5">
         {ticket.email_body ? (
-          <div className="bg-muted/30 rounded-xl p-5 border border-border">
+          <div className="bg-muted/50 rounded-xl p-5 border border-border">
             <div className="text-foreground text-sm leading-relaxed whitespace-pre-wrap">
               {ticket.email_body}
             </div>

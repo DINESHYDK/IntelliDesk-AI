@@ -58,7 +58,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 4;
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -157,7 +157,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className={cn(
-                'w-full pl-10 pr-4 py-2.5 rounded-lg border',
+                'w-full pl-10 pr-4 h-10 rounded-lg border',
                 'bg-background border-input',
                 'text-foreground placeholder:text-muted-foreground',
                 'focus:outline-none focus:ring-2 focus:ring-ring focus:border-input',
@@ -174,7 +174,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                 key={p}
                 onClick={() => setPriorityFilter(p)}
                 className={cn(
-                  'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
+                  'h-10 px-4 rounded-lg text-xs font-semibold transition-all flex items-center justify-center',
                   priorityFilter === p
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
@@ -230,11 +230,11 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
       {/* Ticket Rows */}
       <div className="divide-y divide-border">
         {processedTickets.length === 0 ? (
-          <div className="text-center py-16 text-muted-foreground">
-            <Mail className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p className="text-lg font-medium text-foreground">No tickets found</p>
-            <p className="text-sm">Try adjusting your filters</p>
-          </div>
+          <div className="flex flex-col items-center justify-center py-20 w-full">
+  <Mail className="w-12 h-12 mx-auto mb-3 opacity-50" />
+  <h3 className="text-lg font-medium text-slate-900">No tickets found</h3>
+  <p className="text-slate-500">Try adjusting your filters</p>
+</div>
         ) : (
           displayedTickets.map((ticket) => {
             const slaStatus = calculateSLAStatus(ticket.sla_deadline);

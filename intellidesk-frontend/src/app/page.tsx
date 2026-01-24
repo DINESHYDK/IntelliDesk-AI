@@ -101,7 +101,7 @@ export default function DashboardPage() {
       />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-6 space-y-6">
+      <main className="w-full max-w-[1600px] mx-auto px-4 py-6 space-y-6">
         {/* Demo Mode Banner */}
         {isUsingMockData && (
           <div 
@@ -148,7 +148,7 @@ export default function DashboardPage() {
 
       {/* Footer */}
       <footer className="border-t border-[hsl(var(--border))] py-4 mt-8">
-        <div className="container mx-auto px-4 text-center text-xs text-[hsl(var(--muted-foreground))]">
+        <div className="w-full max-w-[1600px] mx-auto px-4 text-center text-xs text-[hsl(var(--muted-foreground))]">
           <p>
             IntelliDesk AI • Intelligent Email Support Dashboard
           </p>
