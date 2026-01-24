@@ -1,11 +1,11 @@
 // ============================================================================
 // IntelliDesk AI - Ticket Table Component
-// Deep Dark Mode Design with Strict Visual Specifications
+// Deep Dark Mode Design with Pagination
 // ============================================================================
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   AlertTriangle,
   Clock,
@@ -17,11 +17,22 @@ import {
   Sparkles,
   ChevronUp,
   ChevronDown,
-  Mail
+  Mail,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { Ticket, Priority } from '@/types';
 import { formatTimestamp, extractEmailDomain, calculateSLAStatus, cn } from '@/lib/utils';
 import { TicketWorkspace } from './workspace';
+import { usePagination } from '@/components/hooks/use-pagination';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+} from '@/components/ui/pagination';
+import { Button } from '@/components/ui/button';
 
 interface TicketTableProps {
   tickets: Ticket[];
@@ -52,6 +63,15 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [priorityFilter, setPriorityFilter] = useState<Priority | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [priorityFilter, searchQuery, sortField, sortDirection]);
 
   // Sort and filter tickets
   const processedTickets = useMemo(() => {
@@ -94,6 +114,19 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
 
     return result;
   }, [tickets, sortField, sortDirection, priorityFilter, searchQuery]);
+
+  const totalPages = Math.ceil(processedTickets.length / itemsPerPage);
+
+  const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
+    currentPage,
+    totalPages,
+    paginationItemsToDisplay: 5,
+  });
+
+  const displayedTickets = processedTickets.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -211,7 +244,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
             <p className="text-sm">Try adjusting your filters</p>
           </div>
         ) : (
-          processedTickets.map((ticket) => {
+          displayedTickets.map((ticket) => {
             const slaStatus = calculateSLAStatus(ticket.sla_deadline);
             const pStyle = priorityStyles[ticket.priority];
             const tStyle = tierStyles[ticket.customer_tier] || tierStyles.Bronze;
@@ -302,18 +335,16 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                     {slaStatus.isBreached ? (
                       <div className="flex items-center gap-1.5 text-red-500">
                         <AlertTriangle className="w-4 h-4" />
-                        <span className="text-sm font-bold uppercase">Breached</span>
+                        <span className="text-xs font-bold uppercase">Breached</span>
                       </div>
                     ) : (
                       <div className={cn(
-                        'flex items-center gap-1.5',
+                        'flex items-center gap-1.5 text-sm',
                         slaStatus.isCritical ? 'text-red-400' :
                           slaStatus.isWarning ? 'text-orange-400' : 'text-white'
                       )}>
                         <Clock className="w-4 h-4" />
-                        <span className="text-sm font-semibold">
-                          {slaStatus.displayText}
-                        </span>
+                        <span className="font-semibold">{slaStatus.displayText}</span>
                       </div>
                     )}
                   </div>
@@ -409,11 +440,91 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
         )}
       </div>
 
-      {/* Footer */}
-      <div className="px-6 py-3 bg-slate-900/50 border-t border-slate-800">
-        <p className="text-xs text-slate-500 text-center">
-          Showing {processedTickets.length} of {tickets.length} tickets
+      {/* Footer with Pagination */}
+      <div className="px-6 py-4 bg-slate-900/50 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p className="text-xs text-slate-500 text-center md:text-left">
+          Showing {displayedTickets.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to{' '}
+          {Math.min(currentPage * itemsPerPage, processedTickets.length)} of {processedTickets.length} tickets
         </p>
+
+        {processedTickets.length > itemsPerPage && (
+          <Pagination className="w-auto mx-0">
+            <PaginationContent>
+              <PaginationItem>
+                <Button
+                  variant="outline" // Using outline to match dark theme better with border
+                  size="icon"
+                  className="h-8 w-8 bg-slate-800 border-slate-700 hover:bg-slate-700"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4 text-slate-400" />
+                </Button>
+              </PaginationItem>
+
+              {showLeftEllipsis && (
+                <>
+                  <PaginationItem>
+                    <PaginationLink
+                      className="h-8 w-8 bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white"
+                      onClick={() => setCurrentPage(1)}
+                    >
+                      1
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationEllipsis className="text-slate-500" />
+                  </PaginationItem>
+                </>
+              )}
+
+              {pages.map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(page)}
+                    isActive={currentPage === page}
+                    className={cn(
+                      "h-8 w-8",
+                      currentPage === page
+                        ? "bg-blue-600 text-white border-blue-500 hover:bg-blue-500 hover:text-white"
+                        : "bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white"
+                    )}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              {showRightEllipsis && (
+                <>
+                  <PaginationItem>
+                    <PaginationEllipsis className="text-slate-500" />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink
+                      className="h-8 w-8 bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white"
+                      onClick={() => setCurrentPage(totalPages)}
+                    >
+                      {totalPages}
+                    </PaginationLink>
+                  </PaginationItem>
+                </>
+              )}
+
+              <PaginationItem>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8 bg-slate-800 border-slate-700 hover:bg-slate-700"
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4 text-slate-400" />
+                </Button>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
 
       {/* Ticket Workspace Modal */}

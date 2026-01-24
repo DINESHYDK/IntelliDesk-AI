@@ -142,10 +142,14 @@
    Base element styles
    ============================================================================ */
 
+   /*
+   YDK--check
+   */
+
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  margin: 2px;
+  padding: 2px;
 }
 
 html {
