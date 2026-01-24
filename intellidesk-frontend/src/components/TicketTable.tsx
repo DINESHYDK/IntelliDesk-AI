@@ -35,6 +35,7 @@ import { ConfidenceBadge } from './ConfidenceBadge';
 import { SLATimer } from './SLATimer';
 import { AIReasoningOverlay } from './AIReasoningOverlay';
 import { ThreadVisualizer } from './ThreadVisualizer';
+import { TicketWorkspace } from './workspace';
 
 interface TicketTableProps {
   tickets: Ticket[];
@@ -62,6 +63,10 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
   
   // State for AI reasoning overlay
   const [aiOverlayTicket, setAiOverlayTicket] = useState<Ticket | null>(null);
+  
+  // SEARCH: WORKSPACE_STATE
+  // State for full ticket workspace view
+  const [workspaceTicket, setWorkspaceTicket] = useState<Ticket | null>(null);
   
   // Sorting state
   const [sortField, setSortField] = useState<SortField>('sla');
@@ -245,6 +250,8 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                 <div 
                   className="grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 items-center cursor-pointer"
                   onClick={() => toggleExpand(ticket.id)}
+                  onDoubleClick={() => setWorkspaceTicket(ticket)}
+                  title="Double-click to open full workspace"
                 >
                   {/* Priority */}
                   <div className="col-span-1">
@@ -310,7 +317,21 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
                   </div>
 
                   {/* Actions */}
-                  <div className="col-span-1 flex items-center gap-2">
+                  <div className="col-span-1 flex items-center gap-1">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setWorkspaceTicket(ticket);
+                      }}
+                      className={cn(
+                        'p-2 rounded-lg transition-colors',
+                        'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]',
+                        'hover:bg-[hsl(var(--primary)/0.1)]'
+                      )}
+                      title="Open Workspace"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -413,6 +434,15 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
           ticketId={aiOverlayTicket.id}
           onClose={() => setAiOverlayTicket(null)}
           draftResponse={aiOverlayTicket.ai_draft_response}
+        />
+      )}
+
+      {/* SEARCH: TICKET_WORKSPACE_RENDER */}
+      {/* Full Ticket Workspace View */}
+      {workspaceTicket && (
+        <TicketWorkspace
+          ticket={workspaceTicket}
+          onClose={() => setWorkspaceTicket(null)}
         />
       )}
     </div>
