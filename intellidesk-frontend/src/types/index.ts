@@ -27,6 +27,27 @@ export interface ThreadChild {
 }
 
 /**
+ * Solution resource link (video, doc, manual)
+ */
+export interface SolutionLink {
+  title: string;
+  url: string;
+  type: 'video' | 'doc' | 'manual' | 'faq';
+}
+
+/**
+ * Customer insight data for sidebar
+ */
+export interface CustomerData {
+  company_name: string;
+  is_potential_lead: boolean;
+  previous_tickets: number;
+  lifetime_value?: string;
+  last_contact?: string;
+  account_manager?: string;
+}
+
+/**
  * Individual support ticket with all metadata
  * Core data structure for the dashboard
  */
@@ -43,6 +64,12 @@ export interface Ticket {
   thread_count: number;       // Number of merged emails for deduplication
   thread_children?: ThreadChild[];  // Array of merged emails
   ai_draft_response?: string; // Pre-generated AI response
+  // Phase 1: Full email body
+  email_body?: string;
+  // Phase 2: Solution resources
+  solution_links?: SolutionLink[];
+  // Phase 3: Customer insights
+  customer_data?: CustomerData;
 }
 
 /**
