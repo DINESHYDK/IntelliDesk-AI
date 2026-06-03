@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ---------------------------------------
+# Temporarily Ignored External Repositories
+# ---------------------------------------
+# Ignore the friend's backend code folder
+/intellidesk/
+/intellidesk-ce313c7ffb799c973b527c71be33437005e49e94/
+# Source reference code (not part of build)
+shajith_code/
+supabase_schema.sql
