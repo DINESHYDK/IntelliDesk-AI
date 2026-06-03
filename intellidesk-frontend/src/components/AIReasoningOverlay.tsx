@@ -37,25 +37,24 @@ export function AIReasoningOverlay({
   const sentimentStyles = getSentimentStyles(analysis.sentiment);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-lg animate-fade-in">
       <div 
         className={cn(
           'relative w-full max-w-lg rounded-2xl overflow-hidden',
-          'bg-[hsl(var(--card))] border-2',
-          'animate-slide-in-right shadow-2xl',
-          confidenceStyles.border
+          'glass-neon-purple animate-neon-pulse',
+          'animate-slide-in-right shadow-2xl'
         )}
       >
         {/* Header with gradient */}
         <div 
           className={cn(
             'relative px-6 py-4 border-b border-[hsl(var(--border))]',
-            'bg-gradient-to-r from-[hsl(var(--primary)/0.1)] to-transparent'
+            'bg-gradient-to-r from-[oklch(0.55_0.25_300/0.15)] via-transparent to-[oklch(0.75_0.15_195/0.08)]'
           )}
         >
           {/* AI Badge */}
           <div className="flex items-center gap-2 mb-2">
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-[hsl(var(--primary)/0.15)] text-[hsl(var(--primary))]">
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-[oklch(0.55_0.25_300/0.2)] neon-text-cyan">
               <Sparkles className="w-3.5 h-3.5" />
               <span className="text-xs font-semibold">AI Analysis</span>
             </div>
@@ -86,7 +85,8 @@ export function AIReasoningOverlay({
               className={cn(
                 'flex items-center gap-1.5 px-3 py-1.5 rounded-full border',
                 confidenceStyles.bg,
-                confidenceStyles.border
+                confidenceStyles.border,
+                analysis.confidence >= 80 ? 'confidence-ring-high' : 'confidence-ring-low'
               )}
             >
               {analysis.confidence >= 80 ? (
@@ -130,7 +130,7 @@ export function AIReasoningOverlay({
               <Sparkles className="w-4 h-4 text-[hsl(var(--primary))]" />
               AI Reasoning
             </h4>
-            <div className="p-4 rounded-lg bg-[hsl(var(--muted)/0.3)] border border-[hsl(var(--border))]">
+            <div className="p-4 rounded-lg glass-card border-white/5">
               <p className="text-sm text-[hsl(var(--foreground))] leading-relaxed">
                 "{analysis.reasoning}"
               </p>
@@ -165,7 +165,7 @@ export function AIReasoningOverlay({
               <div 
                 className={cn(
                   'p-4 rounded-lg border-l-4',
-                  'bg-[hsl(var(--accent)/0.05)] border-[hsl(var(--accent))]'
+                  'bg-[oklch(0.75_0.15_195/0.05)] border-[oklch(0.75_0.15_195/0.5)]'
                 )}
               >
                 <p className="text-sm text-[hsl(var(--foreground))] leading-relaxed italic">

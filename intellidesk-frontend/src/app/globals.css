@@ -148,6 +148,16 @@
   --tier-gold-bg: 45 93% 12%;
   --tier-silver-bg: 220 14% 20%;
   --tier-bronze-bg: 30 41% 12%;
+
+  /* Glassmorphism Base Tokens */
+  --glass-bg: 222 47% 8% / 0.7;
+  --glass-border: 217 33% 30% / 0.3;
+  --glass-blur: 16px;
+  
+  /* Neon Glow Intensities */
+  --neon-glow-sm: 0 0 8px;
+  --neon-glow-md: 0 0 15px;
+  --neon-glow-lg: 0 0 30px;
 }
 
 /* ============================================================================
@@ -207,6 +217,13 @@
   --color-sentiment-happy: hsl(var(--sentiment-happy));
   --color-sentiment-neutral: hsl(var(--sentiment-neutral));
   --color-sentiment-frustrated: hsl(var(--sentiment-frustrated));
+
+  /* Neon Accent Colors */
+  --color-neon-cyan: oklch(0.75 0.15 195);
+  --color-neon-pink: oklch(0.65 0.25 350);
+  --color-neon-purple: oklch(0.55 0.25 300);
+  --color-neon-green: oklch(0.72 0.2 145);
+  --color-neon-blue: oklch(0.6 0.2 260);
 
   /* Font families */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
@@ -420,3 +437,125 @@ body {
 .priority-dot-p2 { background: hsl(var(--high)); }
 .priority-dot-p3 { background: hsl(var(--medium)); }
 .priority-dot-p4 { background: hsl(var(--low)); }
+
+/* ============================================================================
+   Glassmorphism & Neon Design System
+   Premium dark-mode aesthetics with glassy backdrops and neon accents
+   ============================================================================ */
+
+/* Glass Card - Primary glassmorphism container */
+.glass-card {
+  background: hsla(var(--glass-bg));
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid hsla(var(--glass-border));
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Glass Card with Neon Cyan border glow */
+.glass-neon-cyan {
+  background: hsla(var(--glass-bg));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid oklch(0.75 0.15 195 / 0.25);
+  box-shadow: 
+    0 0 10px oklch(0.75 0.15 195 / 0.1),
+    0 0 30px oklch(0.75 0.15 195 / 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Glass Card with Neon Pink border glow */
+.glass-neon-pink {
+  background: hsla(var(--glass-bg));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid oklch(0.65 0.25 350 / 0.25);
+  box-shadow: 
+    0 0 10px oklch(0.65 0.25 350 / 0.1),
+    0 0 30px oklch(0.65 0.25 350 / 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Glass Card with Neon Purple border glow */
+.glass-neon-purple {
+  background: hsla(var(--glass-bg));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid oklch(0.55 0.25 300 / 0.25);
+  box-shadow: 
+    0 0 10px oklch(0.55 0.25 300 / 0.1),
+    0 0 30px oklch(0.55 0.25 300 / 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Neon text glow effect */
+.neon-text-cyan {
+  color: oklch(0.75 0.15 195);
+  text-shadow: 0 0 8px oklch(0.75 0.15 195 / 0.5);
+}
+
+.neon-text-pink {
+  color: oklch(0.65 0.25 350);
+  text-shadow: 0 0 8px oklch(0.65 0.25 350 / 0.5);
+}
+
+.neon-text-green {
+  color: oklch(0.72 0.2 145);
+  text-shadow: 0 0 8px oklch(0.72 0.2 145 / 0.5);
+}
+
+/* Neon border pulse animation */
+@keyframes neon-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 5px oklch(0.75 0.15 195 / 0.2),
+      0 0 15px oklch(0.75 0.15 195 / 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 10px oklch(0.75 0.15 195 / 0.4),
+      0 0 30px oklch(0.75 0.15 195 / 0.2),
+      0 0 50px oklch(0.75 0.15 195 / 0.1);
+  }
+}
+
+.animate-neon-pulse {
+  animation: neon-pulse 3s ease-in-out infinite;
+}
+
+/* Neon border glow on hover */
+@keyframes neon-border-flow {
+  0% { border-color: oklch(0.75 0.15 195 / 0.3); }
+  33% { border-color: oklch(0.55 0.25 300 / 0.3); }
+  66% { border-color: oklch(0.65 0.25 350 / 0.3); }
+  100% { border-color: oklch(0.75 0.15 195 / 0.3); }
+}
+
+.animate-neon-border-flow {
+  animation: neon-border-flow 6s ease-in-out infinite;
+}
+
+/* Glowing confidence ring */
+.confidence-ring-high {
+  box-shadow: 
+    0 0 6px oklch(0.72 0.2 145 / 0.4),
+    inset 0 0 6px oklch(0.72 0.2 145 / 0.1);
+}
+
+.confidence-ring-low {
+  box-shadow: 
+    0 0 6px oklch(0.65 0.25 350 / 0.4),
+    inset 0 0 6px oklch(0.65 0.25 350 / 0.1);
+}
+
+/* Subtle grain texture overlay for glass panels */
+.glass-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}

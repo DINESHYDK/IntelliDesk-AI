@@ -16,7 +16,7 @@ import {
   Mail,
   Sparkles
 } from 'lucide-react';
-import { Ticket } from '@/types';
+import { FrontendTicket as Ticket } from '@/types';
 import { cn } from '@/lib/utils';
 import { EmailPanel } from './EmailPanel';
 import { AIResponsePanel } from './AIResponsePanel';
@@ -53,22 +53,22 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
     <>
       {/* Fixed backdrop that covers everything */}
       <div 
-        className="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm"
+        className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md"
         onClick={onClose}
       />
 
       {/* Modal - Centered with fixed position */}
       <div 
         className={cn(
-          'fixed z-[101] bg-card shadow-2xl border border-border',
+          'fixed z-[101] glass-neon-cyan shadow-2xl',
           'flex flex-col overflow-hidden',
           isFullscreen 
             ? 'inset-0' 
-            : 'top-[5vh] left-[2.5vw] right-[2.5vw] bottom-[5vh] lg:left-[5vw] lg:right-[5vw] rounded-2xl'
+            : 'top-[5vh] left-[2.5vw] right-[2.5vw] bottom-[5vh] lg:left-[5vw] lg:right-[5vw] rounded-2xl animate-neon-border-flow'
         )}
       >
         {/* Header Bar */}
-        <header className="h-14 flex-shrink-0 flex items-center justify-between px-4 bg-muted/50 border-b border-border">
+        <header className="h-14 flex-shrink-0 flex items-center justify-between px-4 bg-transparent border-b border-white/5">
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
@@ -111,13 +111,13 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
         </header>
 
         {/* Mobile Tab Navigation */}
-        <nav className="lg:hidden h-11 flex-shrink-0 flex border-b border-border bg-muted/30">
+        <nav className="lg:hidden h-11 flex-shrink-0 flex border-b border-border bg-white/[0.02]">
           <button
             onClick={() => setActiveTab('email')}
             className={cn(
               'flex-1 flex items-center justify-center gap-1.5 text-sm font-medium transition-colors',
               activeTab === 'email'
-                ? 'text-primary border-b-2 border-primary bg-primary/5'
+                ? 'neon-text-cyan border-b-2 border-[oklch(0.75_0.15_195)] bg-[oklch(0.75_0.15_195/0.05)]'
                 : 'text-muted-foreground'
             )}
           >
@@ -129,7 +129,7 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
             className={cn(
               'flex-1 flex items-center justify-center gap-1.5 text-sm font-medium transition-colors',
               activeTab === 'response'
-                ? 'text-accent border-b-2 border-accent bg-accent/5'
+                ? 'neon-text-pink border-b-2 border-[oklch(0.65_0.25_350)] bg-[oklch(0.65_0.25_350/0.05)]'
                 : 'text-muted-foreground'
             )}
           >
@@ -141,7 +141,7 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
             className={cn(
               'flex-1 flex items-center justify-center gap-1.5 text-sm font-medium transition-colors',
               activeTab === 'customer'
-                ? 'text-success border-b-2 border-success bg-success/5'
+                ? 'neon-text-green border-b-2 border-[oklch(0.72_0.2_145)] bg-[oklch(0.72_0.2_145/0.05)]'
                 : 'text-muted-foreground'
             )}
           >
@@ -166,7 +166,7 @@ export function TicketWorkspace({ ticket, onClose }: TicketWorkspaceProps) {
 
             {/* Customer Sidebar */}
             {showSidebar && (
-              <aside className="w-72 xl:w-80 flex-shrink-0 overflow-y-auto border-l border-border bg-card/30">
+              <aside className="w-72 xl:w-80 flex-shrink-0 overflow-y-auto border-l border-border bg-white/[0.02]">
                 <CustomerSidebar ticket={ticket} />
               </aside>
             )}
