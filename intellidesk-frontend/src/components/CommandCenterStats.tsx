@@ -15,7 +15,7 @@ import {
 	Loader2,
 	PieChart,
 } from "lucide-react";
-import { Ticket, TicketPriority } from "@/types/ticket";
+import { FrontendTicket as Ticket, TicketPriority } from "@/types/ticket";
 import { cn } from "@/lib/utils";
 
 interface CommandCenterStatsProps {

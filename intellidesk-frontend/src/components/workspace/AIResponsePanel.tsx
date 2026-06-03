@@ -19,7 +19,7 @@ import {
   ExternalLink,
   CheckCircle2
 } from 'lucide-react';
-import { Ticket } from '@/types';
+import { FrontendTicket as Ticket } from '@/types';
 import { cn, getSentimentStyles } from '@/lib/utils';
 import { MatchQualityBadge } from './MatchQualityBadge';
 import { Button } from '@/components/ui/button';

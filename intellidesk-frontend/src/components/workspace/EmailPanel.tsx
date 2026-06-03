@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Mail, Clock, Building, AlertTriangle } from 'lucide-react';
-import { Ticket } from '@/types';
+import { FrontendTicket as Ticket } from '@/types';
 import { formatFullDate, calculateSLAStatus, cn, getPriorityStyles } from '@/lib/utils';
 
 interface EmailPanelProps {

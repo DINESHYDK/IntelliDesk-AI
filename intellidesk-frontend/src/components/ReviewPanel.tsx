@@ -26,7 +26,7 @@ import {
 	Mail,
 	Zap,
 } from "lucide-react";
-import { Ticket } from "@/types/ticket";
+import { FrontendTicket as Ticket } from "@/types/ticket";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";

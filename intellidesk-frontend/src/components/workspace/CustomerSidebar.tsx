@@ -15,7 +15,7 @@ import {
   Phone,
   ExternalLink
 } from 'lucide-react';
-import { Ticket } from '@/types';
+import { FrontendTicket as Ticket } from '@/types';
 import { formatTimestamp, cn, getTierStyles } from '@/lib/utils';
 import { Button } from '../ui/button';
 
@@ -27,7 +27,7 @@ export function CustomerSidebar({ ticket }: CustomerSidebarProps) {
   const domain = ticket.sender.split('@')[1];
   const customerData = ticket.customer_data;
   const companyName = customerData?.company_name || domain.split('.')[0].charAt(0).toUpperCase() + domain.split('.')[0].slice(1);
-  const tStyle = getTierStyles(ticket.customer_tier);
+  const tStyle = getTierStyles((ticket.customer_tier || 'Bronze') as import('@/types').AccountTier);
 
   return (
     <div className="flex flex-col h-full bg-card/50">

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Ticket, DashboardStats } from "@/types/ticket";
+import { FrontendTicket as Ticket, DashboardStats } from "@/types/ticket";
 import { supabase } from "@/lib/supabase";
 
 interface UseTicketStreamReturn {
@@ -18,6 +18,9 @@ export function useTicketStream(): UseTicketStreamReturn {
 		queue_depth: 0,
 		critical_issues: 0,
 		avg_confidence: 0,
+		avg_sentiment: 'Neutral',
+		critical_breaches: 0,
+		my_queue_count: 0,
 	});
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
@@ -54,6 +57,9 @@ export function useTicketStream(): UseTicketStreamReturn {
 			queue_depth: activeTickets.length,
 			critical_issues: criticals,
 			avg_confidence: avgConfidence, // stored as 0-100
+			avg_sentiment: 'Neutral', // TODO: compute from ticket tones
+			critical_breaches: criticals, // SLA breaches approximated by P1 count
+			my_queue_count: activeTickets.length,
 		};
 	};
 

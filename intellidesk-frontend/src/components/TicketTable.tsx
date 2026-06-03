@@ -20,7 +20,7 @@ import {
 	ChevronLeft,
 	ChevronRight,
 } from "lucide-react";
-import { Ticket, TicketPriority } from "@/types/ticket";
+import { FrontendTicket as Ticket, TicketPriority } from "@/types/ticket";
 import { cn } from "@/lib/utils";
 import { ReviewPanel } from "./ReviewPanel";
 import { usePagination } from "@/components/hooks/use-pagination";
@@ -82,8 +82,8 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
 						new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
 					break;
 				case "status":
-					const statusOrder = { New: 1, Open: 2, Resolved: 3, Closed: 4 };
-					comparison = statusOrder[a.status] - statusOrder[b.status];
+					const statusOrder: Record<string, number> = { New: 1, Open: 2, Resolved: 3, Closed: 4 };
+					comparison = (statusOrder[a.status] ?? 5) - (statusOrder[b.status] ?? 5);
 					break;
 			}
 			return sortDirection === "asc" ? comparison : -comparison;
