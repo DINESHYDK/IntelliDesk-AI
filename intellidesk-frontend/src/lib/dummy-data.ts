@@ -25,7 +25,7 @@ const daysAgo = (days: number): string => {
 };
 
 // SEARCH: MOCK_DASHBOARD_DATA
-export const MOCK_DASHBOARD_DATA: GlobalState = {
+const RAW_MOCK_DATA = {
   stats: {
     critical_breaches: 2,
     my_queue_count: 12,
@@ -728,6 +728,28 @@ IntelliDesk Legal & Compliance`,
       },
     },
   ],
+};
+
+export const MOCK_DASHBOARD_DATA: GlobalState = {
+  stats: RAW_MOCK_DATA.stats,
+  tickets: RAW_MOCK_DATA.tickets.map((t: any) => ({
+    ...t,
+    ticket_id: t.ticket_id || t.id,
+    sender_email: t.sender_email || t.sender,
+    customer_domain: t.customer_domain || (t.sender && t.sender.includes('@') ? t.sender.split('@')[1] : 'unknown.com'),
+    thread_id: t.thread_id || t.id + '_thread',
+    description: t.description || t.email_body || '',
+    created_at: t.created_at || t.timestamp,
+    category: t.category || t.ai_analysis?.category || 'General Inquiry',
+    tone: t.tone || t.ai_analysis?.sentiment || 'Neutral',
+    reasoning: t.reasoning || t.ai_analysis?.reasoning || '',
+    confidence_score: t.confidence_score !== undefined ? t.confidence_score : (t.ai_analysis?.confidence !== undefined ? t.ai_analysis.confidence / 100 : 0.8),
+    ai_draft_response: t.ai_draft_response || '',
+    solution_links: (t.solution_links || []).map((link: any) => ({
+      ...link,
+      label: link.label || link.title,
+    })),
+  })),
 };
 
 export const API_CONFIG = {
