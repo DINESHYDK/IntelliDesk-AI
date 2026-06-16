@@ -2,6 +2,7 @@
 // SEARCH: MIDDLEWARE
 // IntelliDesk AI - Next.js Middleware for Auth Route Protection
 // Protects /dashboard routes and redirects auth pages for logged-in users
+// Route flow: / → /dashboard (server redirect) → middleware checks auth
 // ============================================================================
 
 import { auth } from "@/lib/auth/config";
@@ -16,11 +17,10 @@ export default auth((req) => {
     pathname.startsWith("/api/emails/ingest") ||
     pathname.startsWith("/api/emails/poll") ||
     pathname.startsWith("/api/emails/process-queue");
-  const isLandingPage = pathname === "/";
   const isDashboard = pathname.startsWith("/dashboard");
 
-  // Allow auth-related routes, public API endpoints, and landing page
-  if (isAuthApi || isPublicApi || isLandingPage) {
+  // Always allow auth-related API routes and public webhook endpoints
+  if (isAuthApi || isPublicApi) {
     return NextResponse.next();
   }
 
@@ -46,3 +46,4 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
+
