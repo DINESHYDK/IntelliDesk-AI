@@ -132,6 +132,7 @@ function LoginForm() {
               e.target.style.border = "1px solid rgba(71, 85, 105, 0.5)";
               e.target.style.boxShadow = "none";
             }}
+            suppressHydrationWarning
           />
         </div>
 
@@ -170,6 +171,7 @@ function LoginForm() {
               e.target.style.border = "1px solid rgba(71, 85, 105, 0.5)";
               e.target.style.boxShadow = "none";
             }}
+            suppressHydrationWarning
           />
         </div>
 
@@ -203,6 +205,7 @@ function LoginForm() {
               (e.target as HTMLButtonElement).style.transform = "translateY(0)";
             }
           }}
+          suppressHydrationWarning
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">

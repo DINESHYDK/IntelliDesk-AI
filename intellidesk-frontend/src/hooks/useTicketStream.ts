@@ -63,14 +63,12 @@ export function useTicketStream(): UseTicketStreamReturn {
 		};
 	};
 
-	const fetchData = useCallback(async (): Promise<void> => {
+	const fetchData = useCallback(async (silent: boolean = false): Promise<void> => {
 		if (!isMounted.current) return;
 
 		try {
-			// Only set loading if we don't have tickets yet, OR if we want to show a spinner on refresh.
-			// Since DashboardPage only shows full skeleton if (loading && tickets.length === 0),
-			// we can safely set loading to true here to trigger the header spinner without hiding the content.
-			setLoading(true);
+			// Only set loading if not silent
+			if (!silent) setLoading(true);
 			setError(null);
 
 			// Fetch active tickets (exclude closed if strictly following "Incoming queue" rule, but prompt says "hide status='Closed' tickets from the main 'Incoming' queue but allow them to be searchable")
@@ -107,7 +105,7 @@ export function useTicketStream(): UseTicketStreamReturn {
 
 	useEffect(() => {
 		isMounted.current = true;
-		fetchData();
+		fetchData(false); // Initial load is NOT silent
 
 		// Real-time Subscription to changes
 		const channel = supabase
@@ -117,13 +115,13 @@ export function useTicketStream(): UseTicketStreamReturn {
 				{ event: '*', schema: 'public', table: 'tickets' },
 				(payload) => {
 					// console.log('Realtime change detected:', payload);
-					fetchData();
+					fetchData(true); // Realtime updates are silent
 				}
 			)
 			.subscribe();
 
 		// Polling as fallback (every 30s instead of 5s since we have realtime)
-		const intervalId = setInterval(fetchData, 30000);
+		const intervalId = setInterval(() => fetchData(true), 30000); // Polling is silent
 
 		return () => {
 			isMounted.current = false;
@@ -138,7 +136,7 @@ export function useTicketStream(): UseTicketStreamReturn {
 		stats,
 		loading,
 		error,
-		refresh: fetchData,
+		refresh: () => fetchData(false), // Manual refresh is NOT silent
 		lastUpdated,
 		isUsingMockData: false,
 	};

@@ -149,6 +149,7 @@ export default function SignupPage() {
             style={inputStyle}
             onFocus={onFocus}
             onBlur={onBlur}
+            suppressHydrationWarning
           />
         </div>
 
@@ -172,6 +173,7 @@ export default function SignupPage() {
             style={inputStyle}
             onFocus={onFocus}
             onBlur={onBlur}
+            suppressHydrationWarning
           />
         </div>
 
@@ -196,6 +198,7 @@ export default function SignupPage() {
             style={inputStyle}
             onFocus={onFocus}
             onBlur={onBlur}
+            suppressHydrationWarning
           />
         </div>
 
@@ -221,6 +224,7 @@ export default function SignupPage() {
             style={inputStyle}
             onFocus={onFocus}
             onBlur={onBlur}
+            suppressHydrationWarning
           />
         </div>
 
@@ -254,6 +258,7 @@ export default function SignupPage() {
               (e.target as HTMLButtonElement).style.transform = "translateY(0)";
             }
           }}
+          suppressHydrationWarning
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
