@@ -2,6 +2,7 @@ import { geminiGenerate } from "./generate";
 import { generateEmbedding } from "./embeddings";
 import { queryVectors } from "@/lib/pinecone/client";
 import { supabaseAdmin } from "@/lib/supabase/server";
+import { orgNamespace } from "@/lib/auth/org-context";
 import type { AutoResponseResult, FAQMatch, Severity } from "@/types";
 
 const FAQ_PERFECT_MATCH_THRESHOLD = 0.9;
@@ -20,6 +21,7 @@ export async function generateAutoResponse(
 	severity: Severity,
 	customerName: string | undefined,
 	accountTier: string | null | undefined,
+	orgId: string,
 ): Promise<AutoResponseResult> {
 	// Don't auto-respond to P1/P2 - always needs human
 	if (severity === "P1" || severity === "P2") {
@@ -37,7 +39,7 @@ export async function generateAutoResponse(
 	const queryText = `${emailSubject} ${emailBody}`.slice(0, 2000);
 	const embedding = await generateEmbedding(queryText);
 
-	const faqResults = await queryVectors("faqs", embedding, 5, {
+	const faqResults = await queryVectors(orgNamespace(orgId, "faqs"), embedding, 5, {
 		category: category,
 	});
 

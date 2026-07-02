@@ -11,7 +11,7 @@ import {
 	isLikelySpam,
 	extractTicketReferences,
 } from "@/lib/email/parser";
-import { sendEmail, buildAutoResponseEmail } from "@/lib/email/smtp";
+import { sendEmail, buildAutoResponseEmail, type SmtpConfig } from "@/lib/email/smtp";
 import { orgNamespace } from "@/lib/auth/org-context";
 import type { RawEmail, PipelineResult } from "@/types";
 
@@ -93,7 +93,7 @@ export async function processEmail(
 			new Date(rawEmail.received_at),
 		);
 
-		// 5. AI Classification (1 Groq call)
+		// 5. AI Classification (1 Gemini call)
 		const classification = await classifyEmail(
 			rawEmail.subject,
 			cleanBody,
@@ -241,7 +241,7 @@ export async function processEmail(
 			]);
 		}
 
-		// 10. Auto-response (1 Groq call - only for non-spam, P3/P4)
+		// 10. Auto-response (1 Gemini call - only for non-spam, P3/P4)
 		let autoResponseSent = false;
 		if (!classification.is_spam) {
 			const autoResponse = await generateAutoResponse(
@@ -251,6 +251,7 @@ export async function processEmail(
 				classification.severity,
 				customer.contact_name,
 				customer.account_tier,
+				orgId,
 			);
 
 			if (autoResponse.should_respond && autoResponse.response_text) {
@@ -286,8 +287,9 @@ export async function processEmail(
 						html: emailHtml,
 						text: emailText,
 						inReplyTo: rawEmail.message_id || undefined,
-					});
-					autoResponseSent = true;
+							smtpConfig: await getOrgSmtpConfig(orgId),
+						});
+						autoResponseSent = true;
 				}
 			}
 		}
@@ -396,6 +398,28 @@ async function getSlaResponseTime(severity: string): Promise<string> {
 }
 
 /**
+ * Load the org's stored SMTP credentials (set via Settings → Connect Email).
+ * Returns undefined if the org hasn't connected an outbound mailbox, in which
+ * case sendEmail() safely no-ops.
+ */
+async function getOrgSmtpConfig(orgId: string): Promise<SmtpConfig | undefined> {
+	const { data: org } = await supabaseAdmin
+		.from("organizations")
+		.select("email_config")
+		.eq("id", orgId)
+		.single();
+
+	const smtp = org?.email_config?.smtp;
+	if (!smtp?.user || !smtp?.pass) return undefined;
+	return {
+		host: smtp.host || "smtp.gmail.com",
+		port: smtp.port || 587,
+		user: smtp.user,
+		pass: smtp.pass,
+	};
+}
+
+/**
  * Process multiple emails in bulk with rate limiting
  */
 export async function processEmailBatch(
@@ -409,7 +433,7 @@ export async function processEmailBatch(
 		const result = await processEmail(emails[i], orgId);
 		results.push(result);
 
-		// Rate limit: wait between emails to respect Groq free tier (30 RPM)
+		// Rate limit: small pause between emails to smooth API/DB load
 		if (i < emails.length - 1) {
 			await new Promise((resolve) => setTimeout(resolve, delayMs));
 		}

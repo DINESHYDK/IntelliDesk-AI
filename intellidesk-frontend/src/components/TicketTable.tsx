@@ -155,7 +155,7 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
 		<>
 			<div className="bg-card rounded-xl border border-border overflow-hidden">
 				{/* Filters & Search Bar */}
-				<div className="p-6 border-b border-border">
+				<div className="px-6 py-5 border-b border-border">
 					<div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
 						{/* Search */}
 						<div className="relative flex-1 max-w-md w-full group">

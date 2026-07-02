@@ -1,10 +1,15 @@
 import { Pinecone, type RecordMetadata } from "@pinecone-database/pinecone";
 
 /**
- * Enforced vector dimensionality for gemini-embedding-001.
- * All upsert and query operations validate against this constant.
+ * Enforced vector dimensionality. Must match BOTH:
+ *  - the dimension the Pinecone index was created with, and
+ *  - the `outputDimensionality` requested from gemini-embedding-001
+ *    (see src/lib/gemini/embeddings.ts).
+ * Override via PINECONE_EMBEDDING_DIMENSIONS if your index differs.
  */
-const EMBEDDING_DIMENSIONS = 768;
+export const EMBEDDING_DIMENSIONS = Number(
+	process.env.PINECONE_EMBEDDING_DIMENSIONS || 768,
+);
 
 let pineconeClient: Pinecone | null = null;
 

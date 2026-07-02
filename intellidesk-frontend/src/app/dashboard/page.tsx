@@ -101,7 +101,7 @@ export default function DashboardPage() {
       />
 
       {/* Main Content — flex-1 pushes footer to the absolute bottom */}
-      <main className='flex-1 w-full px-6 md:px-10 py-8 space-y-6'>
+      <main className='flex-1 w-full px-6 md:px-10 py-8 space-y-8'>
 
         {/* Command Center Stats Row */}
         <section>
@@ -110,8 +110,8 @@ export default function DashboardPage() {
 
         {/* Ticket Table - Command Center */}
         <section>
-          <div className='flex items-center justify-between mb-4'>
-            <h2 className='text-xl font-bold text-[hsl(var(--foreground))]'>
+          <div className='flex items-center justify-between mb-5'>
+            <h2 className='text-2xl font-bold text-[hsl(var(--foreground))]'>
               Support Queue
             </h2>
             <span className='text-sm text-[hsl(var(--muted-foreground))]'>

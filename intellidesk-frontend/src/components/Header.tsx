@@ -76,7 +76,7 @@ export function Header({
         'border-b border-[hsl(var(--border))]'
       )}
     >
-      <div className="w-full px-6 md:px-10 py-3">
+      <div className="w-full px-6 md:px-10 py-4">
         <div className="flex items-center justify-between">
           {/* Logo & Branding */}
           <div className="flex items-center gap-3">
