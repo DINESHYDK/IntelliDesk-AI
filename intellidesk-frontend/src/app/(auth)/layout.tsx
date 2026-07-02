@@ -33,14 +33,14 @@ export default function AuthLayout({
         <div
           className="absolute top-1/4 left-1/3 w-72 h-72 rounded-full pointer-events-none"
           style={{
-            background: "radial-gradient(circle, hsla(250,80%,72%,0.14) 0%, transparent 70%)",
+            background: "radial-gradient(circle, hsla(174,54%,56%,0.16) 0%, transparent 70%)",
             filter: "blur(60px)",
           }}
         />
         <div
           className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full pointer-events-none"
           style={{
-            background: "radial-gradient(circle, hsla(188,72%,65%,0.10) 0%, transparent 70%)",
+            background: "radial-gradient(circle, hsla(250,60%,70%,0.10) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />
@@ -68,8 +68,8 @@ export default function AuthLayout({
               >
                 <defs>
                   <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="hsl(250,80%,78%)" />
-                    <stop offset="100%" stopColor="hsl(188,72%,65%)" />
+                    <stop offset="0%" stopColor="hsl(174,54%,68%)" />
+                    <stop offset="100%" stopColor="hsl(250,60%,72%)" />
                   </linearGradient>
                 </defs>
                 <path stroke="url(#logo-grad)" d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.024-4.07A2.5 2.5 0 0 1 5.5 8.5a2.5 2.5 0 0 1 4-2Z" />
@@ -82,7 +82,7 @@ export default function AuthLayout({
                 className="text-3xl font-medium tracking-tight italic"
                 style={{
                   fontFamily: "var(--font-display, Georgia, serif)",
-                  background: "linear-gradient(135deg, hsl(250,80%,80%), hsl(188,72%,70%))",
+                  background: "linear-gradient(135deg, hsl(174,54%,68%), hsl(250,60%,74%))",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -92,7 +92,7 @@ export default function AuthLayout({
               </h1>
               <span
                 className="text-xs font-semibold tracking-widest uppercase"
-                style={{ color: "hsla(250,80%,72%,0.75)", fontFamily: "var(--font-sans, sans-serif)" }}
+                style={{ color: "hsla(174,54%,56%,0.75)", fontFamily: "var(--font-sans, sans-serif)" }}
               >
                 AI Support Platform
               </span>
@@ -107,7 +107,7 @@ export default function AuthLayout({
             Intelligent email support,{" "}
             <span
               style={{
-                background: "linear-gradient(135deg, hsl(250,80%,78%), hsl(188,72%,68%))",
+                background: "linear-gradient(135deg, hsl(174,80%,78%), hsl(188,72%,68%))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -132,9 +132,9 @@ export default function AuthLayout({
                   key={feat}
                   className="px-3 py-1.5 rounded-full text-xs font-medium"
                   style={{
-                    background: "hsla(250,80%,72%,0.10)",
-                    border: "1px solid hsla(250,80%,72%,0.22)",
-                    color: "hsl(250,80%,82%)",
+                    background: "hsla(174,54%,56%,0.10)",
+                    border: "1px solid hsla(174,54%,56%,0.22)",
+                    color: "hsl(174,54%,72%)",
                     fontFamily: "var(--font-sans, sans-serif)",
                   }}
                 >
@@ -158,7 +158,7 @@ export default function AuthLayout({
                 <p
                   className="text-xl font-semibold tabular-nums"
                   style={{
-                    color: "hsl(250,80%,78%)",
+                    color: "hsl(174,54%,72%)",
                     fontFamily: "var(--font-mono, monospace)",
                   }}
                 >
@@ -199,15 +199,15 @@ export default function AuthLayout({
                 strokeLinejoin="round"
                 className="w-5 h-5"
               >
-                <path stroke="hsl(250,80%,78%)" d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.024-4.07A2.5 2.5 0 0 1 5.5 8.5a2.5 2.5 0 0 1 4-2Z" />
-                <path stroke="hsl(250,80%,78%)" d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 1.024-4.07A2.5 2.5 0 0 0 18.5 8.5a2.5 2.5 0 0 0-4-2Z" />
+                <path stroke="hsl(174,54%,66%)" d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.024-4.07A2.5 2.5 0 0 1 5.5 8.5a2.5 2.5 0 0 1 4-2Z" />
+                <path stroke="hsl(174,54%,66%)" d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 1.024-4.07A2.5 2.5 0 0 0 18.5 8.5a2.5 2.5 0 0 0-4-2Z" />
               </svg>
             </div>
             <span
               className="text-xl font-medium italic"
               style={{
                 fontFamily: "var(--font-display, Georgia, serif)",
-                background: "linear-gradient(135deg, hsl(250,80%,80%), hsl(188,72%,68%))",
+                background: "linear-gradient(135deg, hsl(174,54%,68%), hsl(250,60%,72%))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",

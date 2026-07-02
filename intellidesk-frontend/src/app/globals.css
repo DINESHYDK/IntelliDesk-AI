@@ -109,7 +109,7 @@
   --popover-foreground: 30 10% 92%;
 
   /* Brand */
-  --primary: 250 80% 72%;         /* Pastel violet-indigo — vivid on dark, not neon */
+  --primary: 174 54% 56%;         /* Cyan-teal #4FD1C5 — sharp on dark, Linear/Vercel territory */
   --primary-foreground: 28 8% 10%;
 
   /* Secondary / muted chrome */
@@ -119,8 +119,8 @@
   --muted: 28 7% 14%;
   --muted-foreground: 30 6% 60%; /* Warm mid-tone */
 
-  /* Accent — sky teal */
-  --accent: 188 72% 65%;
+  /* Accent — soft lavender (complements teal without competing) */
+  --accent: 250 60% 70%;
   --accent-foreground: 30 10% 92%;
 
   /* Destructive */
@@ -131,7 +131,7 @@
   --border: 28 7% 17%;
   --border-hover: 28 7% 25%;
   --input: 28 7% 17%;
-  --ring: 250 80% 72%;            /* Focus ring matches primary */
+  --ring: 174 54% 56%;            /* Focus ring matches primary */
 
   /* Priority colors — desaturated, harmonized */
   --urgent: 358 60% 53%;         /* P1 — muted red */
@@ -142,7 +142,7 @@
   /* Priority backgrounds */
   --urgent-bg: 358 60% 12%;
   --high-bg: 22 74% 12%;
-  --medium-bg: 250 80% 12%;
+  --medium-bg: 174 54% 10%;
   --low-bg: 150 36% 10%;
 
   /* Confidence */
@@ -152,15 +152,15 @@
   --confidence-low-bg: 358 60% 12%;
 
   /* Tier */
-  --tier-gold: 250 80% 72%;       /* Reuses primary */
-  --tier-gold-bg: 250 80% 10%;
-  --tier-silver: 188 72% 50%;
-  --tier-silver-bg: 188 72% 10%;
+  --tier-gold: 174 54% 56%;       /* Reuses primary */
+  --tier-gold-bg: 174 54% 10%;
+  --tier-silver: 250 60% 60%;
+  --tier-silver-bg: 250 60% 10%;
   --tier-bronze: 22 40% 44%;
   --tier-bronze-bg: 22 40% 10%;
 
   /* Status / misc */
-  --status-new: 188 72% 65%;
+  --status-new: 174 54% 56%;
   --status-in-progress: 22 74% 54%;
   --status-resolved: 150 36% 43%;
   --warning: 22 74% 54%;

@@ -54,9 +54,9 @@ function LoginForm() {
       className="w-full rounded-2xl p-8"
       style={{
         background: "hsla(28,8%,11%,0.85)",
-        border: "1px solid hsla(250,80%,72%,0.18)",
+        border: "1px solid hsla(174,54%,56%,0.18)",
         boxShadow:
-          "0 0 40px hsla(250,80%,72%,0.06), 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
+          "0 0 40px hsla(174,54%,56%,0.06), 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
         backdropFilter: "blur(20px)",
       }}
     >
@@ -125,8 +125,8 @@ function LoginForm() {
               caretColor: "#818cf8",
             }}
             onFocus={(e) => {
-              e.target.style.border = "1px solid hsla(250,80%,72%,0.55)";
-              e.target.style.boxShadow = "0 0 0 3px hsla(250,80%,72%,0.12)";
+              e.target.style.border = "1px solid hsla(174,54%,56%,0.55)";
+              e.target.style.boxShadow = "0 0 0 3px hsla(174,54%,56%,0.12)";
             }}
             onBlur={(e) => {
               e.target.style.border = "1px solid rgba(71, 85, 105, 0.5)";
@@ -183,25 +183,25 @@ function LoginForm() {
           className="w-full py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200 relative overflow-hidden"
           style={{
             background: loading
-              ? "hsla(250,80%,72%,0.45)"
-              : "linear-gradient(135deg, hsl(250,80%,68%), hsl(250,70%,55%))",
+              ? "hsla(174,54%,56%,0.45)"
+              : "linear-gradient(135deg, hsl(174,54%,52%), hsl(174,60%,40%))",
             color: "#fff",
             boxShadow: loading
               ? "none"
-              : "0 0 20px hsla(250,80%,72%,0.30), 0 4px 15px rgba(0,0,0,0.3)",
+              : "0 0 20px hsla(174,54%,56%,0.30), 0 4px 15px rgba(0,0,0,0.3)",
             cursor: loading ? "not-allowed" : "pointer",
           }}
           onMouseEnter={(e) => {
             if (!loading) {
               (e.target as HTMLButtonElement).style.boxShadow =
-                "0 0 30px hsla(250,80%,72%,0.45), 0 6px 20px rgba(0,0,0,0.3)";
+                "0 0 30px hsla(174,54%,56%,0.45), 0 6px 20px rgba(0,0,0,0.3)";
               (e.target as HTMLButtonElement).style.transform = "translateY(-1px)";
             }
           }}
           onMouseLeave={(e) => {
             if (!loading) {
               (e.target as HTMLButtonElement).style.boxShadow =
-                "0 0 20px hsla(250,80%,72%,0.30), 0 4px 15px rgba(0,0,0,0.3)";
+                "0 0 20px hsla(174,54%,56%,0.30), 0 4px 15px rgba(0,0,0,0.3)";
               (e.target as HTMLButtonElement).style.transform = "translateY(0)";
             }
           }}
@@ -252,17 +252,17 @@ function LoginForm() {
         id="login-signup-link"
         className="flex items-center justify-center w-full py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200"
         style={{
-          background: "hsla(250,80%,72%,0.07)",
-          border: "1px solid hsla(250,80%,72%,0.18)",
-          color: "hsl(250,80%,80%)",
+          background: "hsla(174,54%,56%,0.07)",
+          border: "1px solid hsla(174,54%,56%,0.18)",
+          color: "hsl(174,54%,72%)",
         }}
         onMouseEnter={(e) => {
-          (e.currentTarget as HTMLAnchorElement).style.background = "hsla(250,80%,72%,0.13)";
-          (e.currentTarget as HTMLAnchorElement).style.borderColor = "hsla(250,80%,72%,0.35)";
+          (e.currentTarget as HTMLAnchorElement).style.background = "hsla(174,54%,56%,0.13)";
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = "hsla(174,54%,56%,0.35)";
         }}
         onMouseLeave={(e) => {
-          (e.currentTarget as HTMLAnchorElement).style.background = "hsla(250,80%,72%,0.07)";
-          (e.currentTarget as HTMLAnchorElement).style.borderColor = "hsla(250,80%,72%,0.18)";
+          (e.currentTarget as HTMLAnchorElement).style.background = "hsla(174,54%,56%,0.07)";
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = "hsla(174,54%,56%,0.18)";
         }}
       >
         Create an account
