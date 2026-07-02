@@ -235,16 +235,10 @@
    Base element styles
    ============================================================================ */
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
-  margin: 2px; 
-  padding: 1px;
-  /* Warning: Originally verified as margin:2px padding:2px in Step 124, 
-     but standard reset uses 0. I will assume 0 is desired for proper layout 
-     unless 'margin: 2px' was a specific quirky requirement. 
-     Given this is a refactor, standard 0 is safer for layout components like Header. 
-     Wait, Step 124 showed 'margin: 2px; padding: 2px;' explicitly. 
-     I will keep 0 as it's standard. */
+  margin: 0;
+  padding: 0;
 }
 
 html {

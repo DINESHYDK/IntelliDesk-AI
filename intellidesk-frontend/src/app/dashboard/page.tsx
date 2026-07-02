@@ -56,7 +56,7 @@ export default function DashboardPage() {
   // Error state (when no fallback data available)
   if (error && tickets.length === 0) {
     return (
-      <div className='min-h-screen bg-[hsl(var(--background))] flex items-center justify-center p-4'>
+      <div className='min-h-screen bg-[hsl(var(--background))] flex items-center justify-center p-6'>
         <div className='text-center max-w-md animate-fade-in'>
           <div
             className={cn(
@@ -66,7 +66,7 @@ export default function DashboardPage() {
           >
             <Brain className='w-10 h-10 text-[hsl(var(--urgent))]' />
           </div>
-          <h1 className='text-2xl font-bold text-[hsl(var(--foreground))] mb-2'>
+          <h1 className='text-2xl font-bold text-[hsl(var(--foreground))] mb-3'>
             Connection Error
           </h1>
           <p className='text-[hsl(var(--muted-foreground))] mb-6'>
@@ -90,7 +90,7 @@ export default function DashboardPage() {
   // SEARCH: MAIN_DASHBOARD
   // Main dashboard with data
   return (
-    <div className='min-h-screen bg-[hsl(var(--background))]'>
+    <div className='min-h-screen bg-[hsl(var(--background))] flex flex-col'>
       {/* Header */}
       <Header
         isLoading={loading}
@@ -100,8 +100,8 @@ export default function DashboardPage() {
         nextPollIn={nextPollIn}
       />
 
-      {/* Main Content */}
-      <main className='w-full max-w-[1600px] mx-auto px-4 py-6 space-y-6'>
+      {/* Main Content — flex-1 pushes footer to the absolute bottom */}
+      <main className='flex-1 w-full px-6 md:px-10 py-8 space-y-6'>
 
         {/* Command Center Stats Row */}
         <section>
@@ -122,15 +122,11 @@ export default function DashboardPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className='border-t border-[hsl(var(--border))] py-4 mt-8'>
-        <div className='w-full max-w-[1600px] mx-auto px-4 text-center text-xs text-[hsl(var(--muted-foreground))]'>
-          <p>
-            IntelliDesk AI · Intelligent Email Support Dashboard
-          </p>
-          <p className='mt-1'>
-            Built for Agglomeration 2.0 @2026 <br />Powered by AI Classification &amp; n8n Workflows
-          </p>
+      {/* Footer — stays at bottom due to flex-col + flex-1 on main */}
+      <footer className='border-t border-[hsl(var(--border))] py-4'>
+        <div className='w-full px-6 md:px-10 text-center text-xs text-[hsl(var(--muted-foreground))]'>
+          <p>IntelliDesk AI · Intelligent Email Support Dashboard</p>
+          <p className='mt-1'>Built for Agglomeration 2.0 @2026 &nbsp;·&nbsp; Powered by AI Classification &amp; n8n Workflows</p>
         </div>
       </footer>
     </div>
