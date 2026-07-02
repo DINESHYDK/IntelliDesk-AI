@@ -1,7 +1,7 @@
 // ============================================================================
 // SEARCH: HEADER_COMPONENT
 // IntelliDesk AI - Dashboard Header Component
-// Top navigation with branding, status indicators, and user dropdown
+// Top navigation with branding, status indicators, brass countdown, and user dropdown
 // ============================================================================
 
 'use client';
@@ -14,12 +14,67 @@ import {
   WifiOff, 
   Clock,
   LogOut,
-  User,
   ChevronDown,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeSwitch } from '@/components/ui/theme-switch-button';
 import { signOut, useSession } from 'next-auth/react';
+
+// ----------------------------------------------------------------------------
+// SEARCH: BRASS_SWEEP
+// A small brass sweep ring that drains continuously as the poll timer ticks
+// down. Uses CSS animation on stroke-dashoffset for a smooth mechanical feel.
+// ----------------------------------------------------------------------------
+function BrassSweep({ 
+  secondsLeft, 
+  totalSeconds = 30, 
+  degraded = false 
+}: { 
+  secondsLeft: number; 
+  totalSeconds?: number;
+  degraded?: boolean;
+}) {
+  const r = 10;
+  const circ = 2 * Math.PI * r; // ≈ 62.83
+  const pct = Math.max(0, Math.min(1, secondsLeft / totalSeconds));
+  const dash = pct * circ;
+
+  return (
+    <div className="hidden md:flex flex-col items-center gap-0.5" title={`Next refresh in ${secondsLeft}s`}>
+      <svg width="28" height="28" viewBox="0 0 28 28" className="-rotate-90">
+        {/* Track */}
+        <circle
+          cx="14" cy="14" r={r}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="text-[hsl(var(--border))]"
+        />
+        {/* Sweep */}
+        <circle
+          cx="14" cy="14" r={r}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray={`${dash} ${circ}`}
+          className={cn(
+            'transition-[stroke-dasharray] duration-1000 linear',
+            degraded 
+              ? 'text-[hsl(var(--high))]' 
+              : 'text-[hsl(var(--primary))]'
+          )}
+        />
+      </svg>
+      <span 
+        className="text-[10px] tabular-nums text-[hsl(var(--muted-foreground))]"
+        style={{ fontFamily: 'var(--font-mono)' }}
+      >
+        {secondsLeft}s
+      </span>
+    </div>
+  );
+}
 
 interface HeaderProps {
   isLoading?: boolean;
@@ -90,7 +145,7 @@ export function Header({
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gradient">
+              <h1 className="font-display italic text-xl font-medium text-[hsl(var(--primary))]">
                 IntelliDesk AI
               </h1>
               <p className="text-xs text-[hsl(var(--muted-foreground))]">
@@ -123,17 +178,21 @@ export function Header({
               )}
             </div>
 
-            {/* Last Updated & Poll Timer */}
+            {/* Updated timestamp + Brass Sweep countdown ring */}
             {lastUpdated && (
-              <div className="hidden md:flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
-                <Clock className="w-3.5 h-3.5" />
-                <span>
-                  Updated {lastUpdated.toLocaleTimeString()}
-                </span>
-                {nextPollIn && (
-                  <span className="text-[hsl(var(--primary))]">
-                    ({nextPollIn}s)
+              <div className="hidden md:flex items-center gap-3">
+                <div className="flex items-center gap-1.5 text-xs text-[hsl(var(--muted-foreground))]">
+                  <Clock className="w-3.5 h-3.5" strokeWidth={1.75} />
+                  <span style={{ fontFamily: 'var(--font-mono)' }}>
+                    {lastUpdated.toLocaleTimeString()}
                   </span>
+                </div>
+                {nextPollIn !== undefined && (
+                  <BrassSweep 
+                    secondsLeft={nextPollIn} 
+                    totalSeconds={30}
+                    degraded={isUsingMockData}
+                  />
                 )}
               </div>
             )}

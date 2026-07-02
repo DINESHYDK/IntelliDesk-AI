@@ -17,6 +17,7 @@ import {
 	ChevronUp,
 	ChevronDown,
 	Mail,
+	Inbox,
 	ChevronLeft,
 	ChevronRight,
 } from "lucide-react";
@@ -246,15 +247,41 @@ export function TicketTable({ tickets, isLoading = false }: TicketTableProps) {
 				{/* Ticket Rows */}
 				<div className="divide-y divide-border">
 					{processedTickets.length === 0 ? (
-						<div className="flex flex-col items-center justify-center py-20 w-full">
-							<Mail className="w-12 h-12 mx-auto mb-3 opacity-50" />
-							<h3 className="text-lg font-medium text-foreground">
-								No tickets found
+					<div className="flex flex-col items-center justify-center py-24 w-full gap-4">
+						<Inbox 
+							className="w-13 h-13 text-muted-foreground opacity-50" 
+							strokeWidth={1.5}
+						/>
+						<div className="text-center">
+							<h3 className="text-base font-medium text-foreground">
+								No tickets in queue
 							</h3>
-							<p className="text-muted-foreground">
-								Try adjusting your filters
+							<p className="text-sm text-muted-foreground mt-1">
+								{searchQuery || priorityFilter !== "all"
+									? "Try adjusting your filters"
+									: "Your inbox is clear"}
 							</p>
 						</div>
+						{process.env.NEXT_PUBLIC_DEMO_MODE === "true" && !searchQuery && priorityFilter === "all" && (
+							<button
+								onClick={async () => {
+									try {
+										await fetch("/api/seed", { method: "POST" });
+									} catch {
+										// silent — seed is best-effort in demo mode
+									}
+								}}
+								className={cn(
+									"mt-2 px-4 py-2 rounded-lg text-sm font-medium",
+									"border border-[hsl(var(--accent)/0.4)] bg-[hsl(var(--accent)/0.1)]",
+									"text-[hsl(var(--accent))] hover:bg-[hsl(var(--accent)/0.15)]",
+									"transition-colors duration-150",
+								)}
+							>
+								Load sample tickets
+							</button>
+						)}
+					</div>
 					) : (
 						displayedTickets.map((ticket) => {
 							const pStyle = getPriorityStyle(ticket.priority);

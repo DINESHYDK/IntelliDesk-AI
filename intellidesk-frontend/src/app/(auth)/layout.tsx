@@ -1,7 +1,7 @@
 // ============================================================================
 // SEARCH: AUTH_LAYOUT
 // IntelliDesk AI - Auth Route Group Layout
-// Centered layout with glassmorphism branding panel
+// Two-panel split: branding left, form right — Rev. 2 palette
 // ============================================================================
 
 import type { Metadata } from "next";
@@ -17,75 +17,72 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex">
-      {/* Left branding panel — hidden on small screens */}
+    <div className="min-h-screen flex" style={{ background: "hsl(30 9% 7%)" }}>
+
+      {/* ────────────────────────────────────────────────────────────────────
+          Left branding panel
+      ──────────────────────────────────────────────────────────────────── */}
       <div
         className="hidden lg:flex lg:w-1/2 xl:w-[55%] relative items-center justify-center overflow-hidden"
         style={{
           background:
-            "linear-gradient(135deg, hsl(222 47% 6%) 0%, hsl(240 30% 8%) 50%, hsl(222 47% 5%) 100%)",
+            "linear-gradient(145deg, hsl(30 9% 7%) 0%, hsl(28 8% 9%) 60%, hsl(250 20% 9%) 100%)",
         }}
       >
-        {/* Neon glow orbs */}
+        {/* Soft ambient glows — pastel violet + teal, no neon */}
         <div
-          className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full pointer-events-none"
+          className="absolute top-1/4 left-1/3 w-72 h-72 rounded-full pointer-events-none"
           style={{
-            background: "radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%)",
-            filter: "blur(40px)",
-          }}
-        />
-        <div
-          className="absolute bottom-1/3 right-1/4 w-80 h-80 rounded-full pointer-events-none"
-          style={{
-            background: "radial-gradient(circle, rgba(6,182,212,0.18) 0%, transparent 70%)",
+            background: "radial-gradient(circle, hsla(250,80%,72%,0.14) 0%, transparent 70%)",
             filter: "blur(60px)",
           }}
         />
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full pointer-events-none"
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full pointer-events-none"
           style={{
-            background: "radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 60%)",
+            background: "radial-gradient(circle, hsla(188,72%,65%,0.10) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />
 
         {/* Branding content */}
         <div className="relative z-10 text-center px-12 max-w-lg">
-          {/* Logo */}
+
+          {/* Logo mark */}
           <div className="flex items-center justify-center mb-10">
             <div
-              className="relative flex items-center justify-center w-20 h-20 rounded-2xl mr-4"
+              className="relative flex items-center justify-center w-20 h-20 rounded-2xl mr-5"
               style={{
-                background: "linear-gradient(135deg, rgba(99,102,241,0.3), rgba(6,182,212,0.2))",
-                border: "1px solid rgba(99,102,241,0.4)",
-                boxShadow: "0 0 30px rgba(99,102,241,0.3), inset 0 0 20px rgba(255,255,255,0.05)",
+                background: "hsla(250,80%,72%,0.12)",
+                border: "1px solid hsla(250,80%,72%,0.28)",
               }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="url(#brain-gradient)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="w-10 h-10"
               >
                 <defs>
-                  <linearGradient id="brain-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#818cf8" />
-                    <stop offset="100%" stopColor="#06b6d4" />
+                  <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="hsl(250,80%,78%)" />
+                    <stop offset="100%" stopColor="hsl(188,72%,65%)" />
                   </linearGradient>
                 </defs>
-                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.024-4.07A2.5 2.5 0 0 1 5.5 8.5a2.5 2.5 0 0 1 4-2Z" />
-                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 1.024-4.07A2.5 2.5 0 0 0 18.5 8.5a2.5 2.5 0 0 0-4-2Z" />
+                <path stroke="url(#logo-grad)" d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.024-4.07A2.5 2.5 0 0 1 5.5 8.5a2.5 2.5 0 0 1 4-2Z" />
+                <path stroke="url(#logo-grad)" d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 1.024-4.07A2.5 2.5 0 0 0 18.5 8.5a2.5 2.5 0 0 0-4-2Z" />
               </svg>
             </div>
             <div className="text-left">
+              {/* Fraunces wordmark via CSS variable set in layout */}
               <h1
-                className="text-3xl font-bold tracking-tight"
+                className="text-3xl font-medium tracking-tight italic"
                 style={{
-                  background: "linear-gradient(135deg, #c7d2fe, #06b6d4)",
+                  fontFamily: "var(--font-display, Georgia, serif)",
+                  background: "linear-gradient(135deg, hsl(250,80%,80%), hsl(188,72%,70%))",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -93,17 +90,24 @@ export default function AuthLayout({
               >
                 IntelliDesk
               </h1>
-              <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: "rgba(99,102,241,0.8)" }}>
+              <span
+                className="text-xs font-semibold tracking-widest uppercase"
+                style={{ color: "hsla(250,80%,72%,0.75)", fontFamily: "var(--font-sans, sans-serif)" }}
+              >
                 AI Support Platform
               </span>
             </div>
           </div>
 
-          <h2 className="text-2xl font-semibold mb-4" style={{ color: "rgba(226,232,240,0.9)" }}>
+          {/* Hero headline */}
+          <h2
+            className="text-2xl font-semibold mb-4 leading-snug"
+            style={{ color: "hsl(30 10% 88%)", fontFamily: "var(--font-sans, sans-serif)" }}
+          >
             Intelligent email support,{" "}
             <span
               style={{
-                background: "linear-gradient(135deg, #818cf8, #06b6d4)",
+                background: "linear-gradient(135deg, hsl(250,80%,78%), hsl(188,72%,68%))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -112,7 +116,11 @@ export default function AuthLayout({
               automated.
             </span>
           </h2>
-          <p className="text-sm leading-relaxed" style={{ color: "rgba(148,163,184,0.8)" }}>
+
+          <p
+            className="text-sm leading-relaxed"
+            style={{ color: "hsl(30 6% 60%)", fontFamily: "var(--font-sans, sans-serif)" }}
+          >
             AI-powered ticket classification, SLA tracking, and automated responses — built for B2B SaaS teams.
           </p>
 
@@ -124,9 +132,10 @@ export default function AuthLayout({
                   key={feat}
                   className="px-3 py-1.5 rounded-full text-xs font-medium"
                   style={{
-                    background: "rgba(99,102,241,0.12)",
-                    border: "1px solid rgba(99,102,241,0.25)",
-                    color: "rgba(165,180,252,0.9)",
+                    background: "hsla(250,80%,72%,0.10)",
+                    border: "1px solid hsla(250,80%,72%,0.22)",
+                    color: "hsl(250,80%,82%)",
+                    fontFamily: "var(--font-sans, sans-serif)",
                   }}
                 >
                   {feat}
@@ -134,45 +143,71 @@ export default function AuthLayout({
               )
             )}
           </div>
+
+          {/* Subtle stat bar at the bottom */}
+          <div
+            className="flex items-center justify-center gap-8 mt-14 pt-8"
+            style={{ borderTop: "1px solid hsla(28,7%,17%,1)" }}
+          >
+            {[
+              { value: "99.9%", label: "Uptime" },
+              { value: "<2s",   label: "Avg response" },
+              { value: "AI",    label: "Powered" },
+            ].map(({ value, label }) => (
+              <div key={label} className="text-center">
+                <p
+                  className="text-xl font-semibold tabular-nums"
+                  style={{
+                    color: "hsl(250,80%,78%)",
+                    fontFamily: "var(--font-mono, monospace)",
+                  }}
+                >
+                  {value}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: "hsl(30 6% 50%)" }}>
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Right auth form panel */}
+      {/* ────────────────────────────────────────────────────────────────────
+          Right form panel
+      ──────────────────────────────────────────────────────────────────── */}
       <div
         className="flex-1 flex items-center justify-center p-6"
-        style={{
-          background:
-            "linear-gradient(160deg, hsl(222 47% 5%) 0%, hsl(240 20% 7%) 100%)",
-        }}
+        style={{ background: "hsl(28 8% 8%)" }}
       >
         <div className="w-full max-w-[420px]">
-          {/* Mobile logo */}
+          {/* Mobile logo — only shows when left panel is hidden */}
           <div className="flex items-center justify-center gap-3 mb-8 lg:hidden">
             <div
               className="flex items-center justify-center w-10 h-10 rounded-xl"
               style={{
-                background: "linear-gradient(135deg, rgba(99,102,241,0.3), rgba(6,182,212,0.2))",
-                border: "1px solid rgba(99,102,241,0.4)",
+                background: "hsla(250,80%,72%,0.12)",
+                border: "1px solid hsla(250,80%,72%,0.28)",
               }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#818cf8"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="w-5 h-5"
               >
-                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.024-4.07A2.5 2.5 0 0 1 5.5 8.5a2.5 2.5 0 0 1 4-2Z" />
-                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 1.024-4.07A2.5 2.5 0 0 0 18.5 8.5a2.5 2.5 0 0 0-4-2Z" />
+                <path stroke="hsl(250,80%,78%)" d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.024-4.07A2.5 2.5 0 0 1 5.5 8.5a2.5 2.5 0 0 1 4-2Z" />
+                <path stroke="hsl(250,80%,78%)" d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 1.024-4.07A2.5 2.5 0 0 0 18.5 8.5a2.5 2.5 0 0 0-4-2Z" />
               </svg>
             </div>
             <span
-              className="text-xl font-bold"
+              className="text-xl font-medium italic"
               style={{
-                background: "linear-gradient(135deg, #c7d2fe, #06b6d4)",
+                fontFamily: "var(--font-display, Georgia, serif)",
+                background: "linear-gradient(135deg, hsl(250,80%,80%), hsl(188,72%,68%))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",

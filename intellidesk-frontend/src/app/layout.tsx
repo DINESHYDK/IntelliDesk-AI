@@ -4,23 +4,9 @@
 // ============================================================================
 
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-
-// Primary font - Inter for clean UI
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-// Monospace font for code/technical content
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+import { fraunces, plexSans, plexMono } from "./fonts";
 
 // SEO Metadata
 export const metadata: Metadata = {
@@ -43,11 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${fraunces.variable} ${plexSans.variable} ${plexMono.variable} antialiased`}
       >
         <Providers>{children}</Providers>
       </body>
     </html>
   );
 }
-

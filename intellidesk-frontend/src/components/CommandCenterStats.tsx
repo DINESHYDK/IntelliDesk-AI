@@ -160,58 +160,58 @@ export function CommandCenterStats({
 	return (
 		<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 animate-fade-in">
 			{/* 1. Priority Pulse Card */}
-			<div className="col-span-1 p-6 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all">
+			<div className="col-span-1 p-6 rounded-xl bg-card border border-border backdrop-blur-sm card-accent card-accent-urgent">
 				<div className="flex items-center gap-2 mb-4">
-					<Activity className="w-4 h-4 text-primary" />
-					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+					<Activity className="w-4 h-4 text-primary" strokeWidth={1.75} />
+					<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
 						Priority Pulse
 					</span>
 				</div>
 				<div className="grid grid-cols-4 gap-2">
 					{/* P1 */}
 					<div className="text-center">
-						<div className="w-full aspect-square rounded-lg bg-[hsl(var(--destructive)/0.1)] border border-[hsl(var(--destructive)/0.2)] flex items-center justify-center mb-1.5">
-							<span className="text-xl font-bold text-destructive">
+						<div className="w-full aspect-square rounded-lg bg-[hsl(var(--urgent)/0.1)] border border-[hsl(var(--urgent)/0.2)] flex items-center justify-center mb-1.5">
+							<span className="text-xl font-semibold tabular-nums text-[hsl(var(--urgent))]" style={{ fontFamily: 'var(--font-mono)' }}>
 								{metrics.priorityCounts.P1}
 							</span>
 						</div>
-						<span className="text-[11px] font-semibold text-destructive">P1</span>
+						<span className="text-[11px] font-semibold text-[hsl(var(--urgent))]">P1</span>
 					</div>
 					{/* P2 */}
 					<div className="text-center">
-						<div className="w-full aspect-square rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-1.5">
-							<span className="text-xl font-bold text-orange-500">
+						<div className="w-full aspect-square rounded-lg bg-[hsl(var(--high)/0.1)] border border-[hsl(var(--high)/0.2)] flex items-center justify-center mb-1.5">
+							<span className="text-xl font-semibold tabular-nums text-[hsl(var(--high))]" style={{ fontFamily: 'var(--font-mono)' }}>
 								{metrics.priorityCounts.P2}
 							</span>
 						</div>
-						<span className="text-[11px] font-semibold text-orange-500">P2</span>
+						<span className="text-[11px] font-semibold text-[hsl(var(--high))]">P2</span>
 					</div>
 					{/* P3 */}
 					<div className="text-center">
-						<div className="w-full aspect-square rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-1.5">
-							<span className="text-xl font-bold text-blue-500">
+						<div className="w-full aspect-square rounded-lg bg-[hsl(var(--medium)/0.1)] border border-[hsl(var(--medium)/0.2)] flex items-center justify-center mb-1.5">
+							<span className="text-xl font-semibold tabular-nums text-[hsl(var(--medium))]" style={{ fontFamily: 'var(--font-mono)' }}>
 								{metrics.priorityCounts.P3}
 							</span>
 						</div>
-						<span className="text-[11px] font-semibold text-blue-500">P3</span>
+						<span className="text-[11px] font-semibold text-[hsl(var(--medium))]">P3</span>
 					</div>
 					{/* P4 */}
 					<div className="text-center">
-						<div className="w-full aspect-square rounded-lg bg-slate-500/10 border border-slate-500/20 flex items-center justify-center mb-1.5">
-							<span className="text-xl font-bold text-slate-500">
+						<div className="w-full aspect-square rounded-lg bg-[hsl(var(--low)/0.1)] border border-[hsl(var(--low)/0.2)] flex items-center justify-center mb-1.5">
+							<span className="text-xl font-semibold tabular-nums text-[hsl(var(--low))]" style={{ fontFamily: 'var(--font-mono)' }}>
 								{metrics.priorityCounts.P4}
 							</span>
 						</div>
-						<span className="text-[11px] font-semibold text-slate-500">P4</span>
+						<span className="text-[11px] font-semibold text-[hsl(var(--low))]">P4</span>
 					</div>
 				</div>
 			</div>
 
 			{/* 2. Category Mix Card */}
-			<div className="col-span-1 p-6 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all">
+			<div className="col-span-1 p-6 rounded-xl bg-card border border-border backdrop-blur-sm card-accent card-accent-ink">
 				<div className="flex items-center gap-2 mb-4">
-					<PieChart className="w-4 h-4 text-primary" />
-					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+					<PieChart className="w-4 h-4 text-primary" strokeWidth={1.75} />
+					<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
 						Top Categories
 					</span>
 				</div>
@@ -246,22 +246,22 @@ export function CommandCenterStats({
 			</div>
 
 			{/* 3. Resolution Progress Card */}
-			<div className="col-span-1 p-6 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all">
+			<div className="col-span-1 p-6 rounded-xl bg-card border border-border backdrop-blur-sm card-accent card-accent-low">
 				<div className="flex items-center gap-2 mb-4">
-					<CheckCircle2 className="w-4 h-4 text-green-500" />
-					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+					<CheckCircle2 className="w-4 h-4 text-[hsl(var(--low))]" strokeWidth={1.75} />
+					<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
 						Resolution
 					</span>
 				</div>
 				<div className="flex items-center justify-between mb-3">
 					{/* Pending */}
 					<div className="text-center flex-1">
-						<div className="text-warning mb-1.5">
-							<span className="text-3xl font-bold">
+						<div className="text-[hsl(var(--warning))] mb-1.5">
+							<span className="text-3xl font-semibold tabular-nums" style={{ fontFamily: 'var(--font-mono)' }}>
 								{metrics.statusCounts.pending}
 							</span>
 						</div>
-						<span className="text-xs text-muted-foreground uppercase tracking-wide">
+						<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
 							Pending
 						</span>
 					</div>
@@ -269,12 +269,12 @@ export function CommandCenterStats({
 					<div className="h-12 w-px bg-border" />
 					{/* Resolved */}
 					<div className="text-center flex-1">
-						<div className="text-success mb-1.5">
-							<span className="text-3xl font-bold">
+						<div className="text-[hsl(var(--success))] mb-1.5">
+							<span className="text-3xl font-semibold tabular-nums" style={{ fontFamily: 'var(--font-mono)' }}>
 								{metrics.statusCounts.resolved}
 							</span>
 						</div>
-						<span className="text-xs text-muted-foreground uppercase tracking-wide">
+						<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
 							Resolved
 						</span>
 					</div>
@@ -282,10 +282,10 @@ export function CommandCenterStats({
 			</div>
 
 			{/* 4. AI Accuracy Card */}
-			<div className="col-span-1 p-6 rounded-xl bg-card border border-border backdrop-blur-sm hover:border-ring transition-all">
+			<div className="col-span-1 p-6 rounded-xl bg-card border border-border backdrop-blur-sm card-accent card-accent-brass">
 				<div className="flex items-center gap-2 mb-4">
-					<Sparkles className="w-4 h-4 text-accent" />
-					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+					<Sparkles className="w-4 h-4 text-primary" strokeWidth={1.75} />
+					<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
 						AI Accuracy
 					</span>
 				</div>
@@ -294,48 +294,32 @@ export function CommandCenterStats({
 					<div className="relative">
 						<svg className="w-16 h-16 -rotate-90">
 							<circle
-								cx="32"
-								cy="32"
-								r="26"
-								stroke="currentColor"
-								strokeWidth="4"
-								fill="none"
+								cx="32" cy="32" r="26"
+								stroke="currentColor" strokeWidth="4" fill="none"
 								className="text-muted"
 							/>
 							<circle
-								cx="32"
-								cy="32"
-								r="26"
-								stroke="currentColor"
-								strokeWidth="4"
-								fill="none"
+								cx="32" cy="32" r="26"
+								stroke="currentColor" strokeWidth="4" fill="none"
 								strokeDasharray={`${metrics.avgConfidence * 1.63} 163`}
 								className={cn(
 									"transition-all duration-1000",
 									metrics.avgConfidence >= 80
-										? "text-purple-500"
-										: "text-purple-300",
+										? "text-primary"
+										: "text-muted-foreground",
 								)}
 							/>
 						</svg>
-						<span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-foreground">
+						<span className="absolute inset-0 flex items-center justify-center text-sm font-semibold tabular-nums text-foreground" style={{ fontFamily: 'var(--font-mono)' }}>
 							{metrics.avgConfidence}%
 						</span>
 					</div>
 					<div>
-						<p
-							className={cn(
-								"text-sm font-semibold",
-								metrics.avgConfidence >= 80
-									? "text-purple-500"
-									: "text-purple-300",
-							)}
-						>
-							{metrics.avgConfidence >= 90
-								? "Excellent"
-								: metrics.avgConfidence >= 80
-									? "Good"
-									: "Needs Review"}
+						<p className={cn(
+							"text-sm font-semibold",
+							metrics.avgConfidence >= 80 ? "text-primary" : "text-muted-foreground",
+						)}>
+							{metrics.avgConfidence >= 90 ? "Excellent" : metrics.avgConfidence >= 80 ? "Good" : "Needs Review"}
 						</p>
 						<p className="text-xs text-muted-foreground mt-0.5">Avg. Confidence</p>
 					</div>
@@ -345,33 +329,33 @@ export function CommandCenterStats({
 			{/* 5. SLA Alert Zone Card */}
 			<div
 				className={cn(
-					"col-span-2 md:col-span-1 p-6 rounded-xl backdrop-blur-sm transition-all",
+					"col-span-2 md:col-span-1 p-6 rounded-xl backdrop-blur-sm card-accent",
 					metrics.slaMetrics.breached > 0
-						? "bg-destructive/10 border border-destructive/40 hover:border-destructive"
-						: "bg-card border border-border hover:border-ring",
+						? "bg-[hsl(var(--urgent)/0.08)] border border-[hsl(var(--urgent)/0.3)] card-accent-urgent"
+						: "bg-card border border-border card-accent-high",
 				)}
 			>
 				<div className="flex items-center gap-2 mb-4">
-					<Clock className="w-4 h-4 text-destructive" />
-					<span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+					<Clock className="w-4 h-4 text-[hsl(var(--urgent))]" strokeWidth={1.75} />
+					<span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
 						SLA Alert Zone
 					</span>
 					{metrics.slaMetrics.breached > 0 && (
-						<PulseDot color="bg-destructive" />
+						<PulseDot color="bg-[hsl(var(--urgent))]" />
 					)}
 				</div>
 				<div className="grid grid-cols-2 gap-3">
 					<div className="text-center">
-						<span className="text-3xl font-bold text-destructive">
+						<span className="text-3xl font-semibold tabular-nums text-[hsl(var(--urgent))]" style={{ fontFamily: 'var(--font-mono)' }}>
 							{metrics.slaMetrics.breached}
 						</span>
-						<p className="text-xs font-medium text-destructive mt-1">Breached</p>
+						<p className="text-xs font-medium text-[hsl(var(--urgent))] mt-1">Breached</p>
 					</div>
 					<div className="text-center">
-						<span className="text-3xl font-bold text-orange-500">
+						<span className="text-3xl font-semibold tabular-nums text-[hsl(var(--high))]" style={{ fontFamily: 'var(--font-mono)' }}>
 							{metrics.slaMetrics.nearBreach}
 						</span>
-						<p className="text-xs font-medium text-orange-500 mt-1">At Risk</p>
+						<p className="text-xs font-medium text-[hsl(var(--high))] mt-1">At Risk</p>
 					</div>
 				</div>
 			</div>
